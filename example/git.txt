@@ -1,0 +1,49 @@
+# using git on darwin
+# creates directory automatically 
+git clone https://github.com/bradosia/ResourceFileUtility
+
+#mac
+cd /Users/CKMo/Brad
+
+#debian
+cd /home/demo
+
+# github reset
+cd ResourceFileUtility
+git reset --hard
+git pull origin master
+
+# build command
+make HOST_OS=LINUX TARGET_ARCH=x86_64
+
+make
+mono example/example_csharp.exe
+mono --debug example/example_csharp.exe
+
+mono example/example_cpp.exe
+
+example/example_csharp
+
+# github commit
+git status
+git add .
+git commit -m "fixed"
+git push
+
+#OSX simulation
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ \
+Simulator.app/Contents/MacOS/iPhone\ Simulator \ -SimulateApplication ./window
+
+
+make OS_DET=IOS ARCH=armv7
+make OS_DET=IOS ARCH=armv7s
+make OS_DET=IOS ARCH=arm64
+
+nm -m -arch all <PathToArchive>/Products/Applications/<AppName>.app/<AppBinary> | grep gcov
+otool -l -arch all <PathToArchive>/Products/Applications/<AppName>.app/<AppBinary> | grep __llvm_prf
+
+#apple unzip
+gzcat Test.monad | tar xf -
+
+#MinGW-W64 GCC-7.3.0
+#x86_64-posix-sjlj

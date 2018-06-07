@@ -1,0 +1,116 @@
+﻿{
+	"options": {
+		"directoryEntryReserve": 256,
+		"tryToUpdate": true
+	},
+	"files": [
+		{
+			"handle": "cone",
+			"path": "resources/models/cone/cone.obj",
+			"inType": "obj",
+			"outType": "v1"
+		},
+		{
+			"handle": "cylinder",
+			"path": "resources/models/cylinder/cylinder.obj",
+			"inType": "obj",
+			"outType": "v1"
+		},
+		{
+			"handle": "maskboy",
+			"path": "resources/models/Maskboy/Maskboy.FBX",
+			"inType": "fbx",
+			"outType": "v1"
+		},
+		{
+			"handle": "maskboy_t",
+			"path": "resources/models/Maskboy/Character_Man.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "maskboy_n",
+			"path": "resources/models/Maskboy/Character_Man_normals2.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "maskboy_s",
+			"path": "resources/models/Maskboy/Character_Man_Spec.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "VuKhi_t",
+			"path": "resources/models/Maskboy/VuKhi.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "VuKhi_n",
+			"path": "resources/models/Maskboy/VuKhi_normals.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "VuKhi_s",
+			"path": "resources/models/Maskboy/VuKhi_spec.png",
+			"inType": "png",
+			"outType": "RGBA"
+		},
+		{
+			"handle": "sandbag",
+			"path": "resources/models/sandbag/Sandbag_10.fbx",
+			"inType": "fbx",
+			"outType": "v1"
+		},
+		{
+			"handle": "sandbag_ao",
+			"path": "resources/models/sandbag/Sandbag_10_ao.jpg",
+			"inType": "jpg",
+			"outType": "RGB"
+		},
+		{
+			"handle": "sandbag_d",
+			"path": "resources/models/sandbag/Sandbag_10_d.jpg",
+			"inType": "jpg",
+			"outType": "RGB"
+		},
+		{
+			"handle": "sandbag_n",
+			"path": "resources/models/sandbag/Sandbag_10_n.jpg",
+			"inType": "jpg",
+			"outType": "RGB"
+		},
+		{
+			"handle": "sandbag_s",
+			"path": "resources/models/sandbag/Sandbag_10_s.jpg",
+			"inType": "jpg",
+			"outType": "RGB"
+		},
+		{
+			"handle": "traffic_cone",
+			"path": "resources/models/Traffic Cone/Traffic Cone.FBX",
+			"inType": "fbx",
+			"outType": "v1"
+		},
+		{
+			"handle": "traffic_cone_t",
+			"path": "resources/models/Traffic Cone/Traffic Cone UV Fixed.png",
+			"inType": "jpg",
+			"outType": "RGB"
+		},
+		{
+			"handle": "song",
+			"path": "resources/music/justinbiebebabyfeat.mp3",
+			"inType": "mp3",
+			"outType": "vorbis"
+		} ,
+		{
+			"handle": "some object",
+			"path": "resources/objects/体系结构.json",
+			"inType": "json",
+			"outType": "gameObj"
+		}
+	]
+}

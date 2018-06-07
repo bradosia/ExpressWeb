@@ -1,0 +1,8 @@
+# this text file just contains some notes for development
+
+#libraries to possibly use
+FlatBuffers
+
+#answers online for reference
+https://www.reddit.com/r/gamedev/comments/6zc7xx/how_i_handle_asset_serialization_in_c/
+https://stackoverflow.com/questions/17639446/c-custom-binary-resource-file
