@@ -5,11 +5,11 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907" moduleId="org.eclipse.cdt.core.settings" name="win-x86-mingw">
 				<externalSettings>
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="../ResourceFileUtility"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ResourceFileUtility/Debug"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ResourceFileUtility/bin"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ResourceFileUtility/win32_mingw"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="../bin/win32_mingw/ResourceFileUtility" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="../ExpressWeb"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ExpressWeb/Debug"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ExpressWeb/bin"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ExpressWeb/win32_mingw"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="../bin/win32_mingw/ExpressWeb" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -22,11 +22,11 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="dll" artifactName="../bin/win32_mingw/ResourceFileUtility" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907" name="win-x86-mingw" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+				<configuration artifactExtension="dll" artifactName="../bin/win32_mingw/ExpressWeb" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907" name="win-x86-mingw" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.1517814387" name="MinGW GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.140316084" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${workspace_loc:/ResourceFileUtility}/win32_mingw" id="cdt.managedbuild.builder.gnu.cross.1095116120" keepEnvironmentInBuildfile="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/ExpressWeb}/win32_mingw" id="cdt.managedbuild.builder.gnu.cross.1095116120" keepEnvironmentInBuildfile="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1630609989" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
 								<option id="gnu.both.asm.option.include.paths.309608915" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1547108796" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -38,7 +38,7 @@
 								<option id="gnu.cpp.compiler.option.dialect.std.68893338" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1034217940" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\boost_1_67_0\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ResourceFileUtility/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ExpressWeb/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.970142560" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0  -std=gnu++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1312011073" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -75,9 +75,9 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.2119940093" moduleId="org.eclipse.cdt.core.settings" name="win-x86_64-mingw">
 				<externalSettings>
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="../ResourceFileUtility"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ResourceFileUtility/win64_mingw"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="../bin/win64_mingw/ResourceFileUtility" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="../ExpressWeb"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="../ExpressWeb/win64_mingw"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="../bin/win64_mingw/ExpressWeb" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -90,11 +90,11 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="dll" artifactName="../bin/win64_mingw/ResourceFileUtility" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.2119940093" name="win-x86_64-mingw" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
+				<configuration artifactExtension="dll" artifactName="../bin/win64_mingw/ExpressWeb" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.2119940093" name="win-x86_64-mingw" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.2119940093." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.1079593528" name="MinGW GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.2059508059" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
-							<builder buildPath="${workspace_loc:/ResourceFileUtility}/win64_mingw" id="cdt.managedbuild.builder.gnu.cross.1697735446" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/ExpressWeb}/win64_mingw" id="cdt.managedbuild.builder.gnu.cross.1697735446" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.2034494398" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1655781636" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1181100444" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -108,7 +108,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.262772954" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\boost_1_67_0\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;/${ProjName}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ResourceFileUtility/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ExpressWeb/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1657987157" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -142,8 +142,8 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907.1962245273" moduleId="org.eclipse.cdt.core.settings" name="win-x86_64-mingw-example">
 				<externalSettings>
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ResourceFileUtility"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ResourceFileUtility/win64_mingw_example"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ExpressWeb"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ExpressWeb/win64_mingw_example"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="../../example/example" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -161,7 +161,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.780836907.1962245273." name="/" resourcePath="">
 						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.3720372" name="MinGW GCC" nonInternalBuilderId="cdt.managedbuild.builder.gnu.cross" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1908938184" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${workspace_loc:/ResourceFileUtility}/win64_mingw_example" id="cdt.managedbuild.builder.gnu.cross.1929180342" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/ExpressWeb}/win64_mingw_example" id="cdt.managedbuild.builder.gnu.cross.1929180342" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1780493837" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
 								<option id="gnu.both.asm.option.include.paths.426545321" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1623813497" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -173,7 +173,7 @@
 								<option id="gnu.cpp.compiler.option.dialect.std.149441191" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.609030680" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;C:\boost_1_67_0\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ResourceFileUtility/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ExpressWeb/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1877483891" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0  -std=gnu++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1691718971" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false"/>
@@ -194,7 +194,7 @@
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.147379299" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.flags.2038861621" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libgcc -static-libstdc++ -static" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1896769564" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" useByScannerDiscovery="false" valueType="libs">
-									<listOptionValue builtIn="false" value="ResourceFileUtility"/>
+									<listOptionValue builtIn="false" value="ExpressWeb"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1848341778" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bin/win-x86_64-mingw}&quot;"/>
@@ -216,27 +216,27 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="ResourceFileUtility.cdt.managedbuild.target.gnu.mingw.exe.870890543" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
+		<project id="ExpressWeb.cdt.managedbuild.target.gnu.mingw.exe.870890543" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="test">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="bin">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="win32_mingw">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="win64_mingw">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/ResourceFileUtility"/>
+			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
 		<configuration configurationName="win64_mingw_example"/>
 	</storageModule>

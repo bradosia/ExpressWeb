@@ -19,17 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Asset.cpp" />
-    <ClCompile Include="..\src\Compiler.cpp" />
-    <ClCompile Include="..\src\crc64.cpp" />
-    <ClCompile Include="..\src\export.cpp" />
-    <ClCompile Include="..\src\iostream.cpp" />
-    <ClCompile Include="..\src\Loader.cpp" />
-    <ClCompile Include="..\src\Parser.cpp" />
-    <ClCompile Include="..\src\ResourceFile.cpp" />
-    <ClCompile Include="..\src\Stream.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\src\Asset.h" />
     <ClInclude Include="..\src\CallbackHandler.h" />
     <ClInclude Include="..\src\Compiler.h" />
@@ -42,10 +31,21 @@
     <ClInclude Include="..\src\ResourceFile.h" />
     <ClInclude Include="..\src\Stream.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Asset.cpp" />
+    <ClCompile Include="..\src\Compiler.cpp" />
+    <ClCompile Include="..\src\crc64.cpp" />
+    <ClCompile Include="..\src\export.cpp" />
+    <ClCompile Include="..\src\iostream.cpp" />
+    <ClCompile Include="..\src\Loader.cpp" />
+    <ClCompile Include="..\src\Parser.cpp" />
+    <ClCompile Include="..\src\ResourceFile.cpp" />
+    <ClCompile Include="..\src\Stream.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{491AB03C-C421-4388-AE9B-EFA111E6C209}</ProjectGuid>
-    <RootNamespace>ResourceFileUtility</RootNamespace>
+    <RootNamespace>ExpressWeb</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
