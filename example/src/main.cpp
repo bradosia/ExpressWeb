@@ -39,39 +39,40 @@ void CBprocess(ResourceFileUtility::ResourceFile* resourceFilePtr) {
 	cout << resourceFilePtr->estimateToString();
 }
 
-int main() {
-	std::ios::sync_with_stdio(false);
-	unsigned int fileNumber, sizeTotal, dataStatus;
-	ResourceFileUtility::Compiler* RFUCompiler =
-			new ResourceFileUtility::Compiler();
-	RFUCompiler->info("resources.json");
-	ResourceFileUtility::ResourceFile* resourceFile =
-			RFUCompiler->getResourceFile();
-	cout << resourceFile->infoToString();
-	fileNumber = resourceFile->assetListSize();
-	RFUCompiler->estimate(CBprocess);
-	RFUCompiler->pack("assets.data", CBprocess);
-	sizeTotal = resourceFile->getProcessingBytesTotal();
+int main(int argc, char** argv) {
+	ExpressWeb::Environment app;
+	ExpressWeb::HTTP::Request req;
+	ExpressWeb::HTTP::Response res;
+	if (argc < 1) {
+		cout << res.headers;
+		cout << res.body;
+		res.end();
+	} else {
+		app.engine("html");
+		/*
+		 * app.use([path,] callback [, callback...])
+		 * Mounts the specified middleware function or functions at the specified path: the middleware
+		 * function is executed when the base of the requested path matches path.
+		 */
+		app.use(bodyParser.urlencoded( { extended: true }));
+		app.use(express.cookieParser('your secret here'));
+		app.use(bodyParser.json());
+		app.use(express.methodOverride());
+		app.use(express.session());
+		app.use(app.router);
+		app.use(express.static(path.join(__dirname, 'public')));
 
-	ResourceFileUtility::Loader* RFULoader = new ResourceFileUtility::Loader();
-	dataStatus = RFULoader->data("assets.data");
-	if (dataStatus == 0) {
-		cout << "Sucessfully opened data file!\n";
-		ResourceFileUtility::Asset* coneAsset = RFULoader->info("cone");
-		unsigned char* modelBytes = RFULoader->open("cone"); //loads all cone data to memory
-		if (coneAsset != NULL && coneAsset->getInType() == "FILE_FORMAT") {
-			// handle FILE_FORMAT
+				app.route.get(filesystem::path("/"),
+						[](ExpressWeb::Request& req, ExpressWeb::Response& res) {
+							// nothing
+						});
+				cout << res.headers;
+				cout << res.body;
+				res.end();
+			}
+			// Keep the console window open in debug mode.
+			string temp;
+			cout << "Press any key to exit." << endl;
+			getline(cin, temp);
+			return 0;
 		}
-	} else if (dataStatus == -1) {
-		cout << "Unknown error opening data file!\n";
-	} else if (dataStatus == 1) {
-		cout << "Could not open resource file!\n";
-	} else if (dataStatus == 2) {
-		cout << "Resource file not compatible with this version!\n";
-	}
-
-	// Keep the console window open in debug mode.
-	string temp;
-	cout << "Press any key to exit." << endl;
-	getline(cin, temp);
-}
