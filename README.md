@@ -1,5 +1,5 @@
 # ResourceFileUtility
-A utility for compiling media assets into a single resource file. Includes a driver for c#.
+A select port of node.js and hapi to c++. 
 
 # Table of Contents
 
@@ -86,18 +86,33 @@ make HOST_OS=OSX TARGET_OS=IOS TARGET_ARCH=x86_64 IPHONE_SDK_PATH=/Applications/
 | linux ubuntu | linux ubuntu | x86_64  | O    | ``` make HOST_OS=LINUX TARGET_ARCH=x86_64 ``` |
  
 # Usage Instructions
-## C++
-there is only a single include needed when statically linking against this library
-```cpp
-#include "include/ResourceFileUtility.h"
+## Creating a server
+
+### node.js + hapi.js
+```nodejs
+const Hapi = require('hapi');
+const server = new Hapi.Server();
+server.connection({ port: 3000 });
+server.start((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log(`Server running at: ${server.info.uri}`);
+});
 ```
 
-### Compile Resources
-Pack all resources in your json file to a single resource file
+### c++
 ```cpp
-ResourceFileUtility::Compiler RFUCompiler = new ResourceFileUtility::Compiler();
-RFUCompiler.info("resources.json");
-RFUCompiler.pack("assets.data");
+#include <ExpressWeb.h>
+
+auto server = ExpressWeb::Server;
+server.connection({ "port", 3000 });
+server.start((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log(`Server running at: ${server.info.uri}`);
+});
 ```
 
 ### Load Resources

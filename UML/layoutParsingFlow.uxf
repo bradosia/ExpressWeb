@@ -220,4 +220,44 @@ bg=green</panel_attributes>
 bg=green</panel_attributes>
     <additional_attributes/>
   </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>742</x>
+      <y>560</y>
+      <w>98</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>ipkn/crow
+--
+routes: flask style
+http: http-parser
+qs_parse
+TinySHA1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>329</x>
+      <y>714</y>
+      <w>112</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Path
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>329</x>
+      <y>749</y>
+      <w>112</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>File System
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
 </diagram>

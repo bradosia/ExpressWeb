@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ExpressWeb</name>
+	<name>ExpressWeb_example</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -26,49 +26,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>README.md</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/README.md</locationURI>
-		</link>
-		<link>
-			<name>UML</name>
+			<name>ServerCreate</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/UML</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/ServerCreate</locationURI>
 		</link>
 		<link>
 			<name>bin</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bin</locationURI>
-		</link>
-		<link>
-			<name>contrib</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/contrib</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/bin</locationURI>
 		</link>
 		<link>
 			<name>include</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/include</locationURI>
-		</link>
-		<link>
-			<name>lib</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lib</locationURI>
-		</link>
-		<link>
-			<name>makefile</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/makefile</locationURI>
-		</link>
-		<link>
-			<name>ref</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/ref</locationURI>
-		</link>
-		<link>
-			<name>src</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/src</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/include</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
