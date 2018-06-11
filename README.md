@@ -115,108 +115,76 @@ server.start((err) => {
 });
 ```
 
-### Load Resources
-Load a resource to memory and handle it
+## Creating a server
+
+### node.js + hapi.js
+```nodejs
+const Hapi = require('hapi');
+
+const server = Hapi.server({
+    port: 3000,
+    host: 'localhost'
+});
+
+server.route({
+    method: 'GET',
+    path: '/',
+    handler: (request, h) => {
+
+        return 'Hello, world!';
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/{name}',
+    handler: (request, h) => {
+
+        return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
+    }
+});
+
+const init = async () => {
+
+    await server.start();
+    console.log(`Server running at: ${server.info.uri}`);
+};
+
+process.on('unhandledRejection', (err) => {
+
+    console.log(err);
+    process.exit(1);
+});
+
+init();
+```
+
+### c++
 ```cpp
-ResourceFileUtility::Loader RFULoader = new ResourceFileUtility::Loader();
-ResourceFileUtility::Info coneInfo = RFULoader.info("cone");
-char modelBytes = RFULoader.open("cone"); //loads all cone data to memory
-if(coneInfo.inType == "FILE_FORMAT"){
-	// handle FILE_FORMAT
-}
+#include <ExpressWeb.h>
+
+auto server = ExpressWeb::Server({{ "port", 3000 }, { "host", "localhost" }});
+server.route({
+    {method: 'GET'},
+    {path: '/'},
+    {handler: [](ExpressWeb::Request& request, ExpressWeb::Response& response) => {
+        return "Hello, world!";
+    }
+});
+
+server.start((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log(`Server running at: ${server.info.uri}`);
+});
 ```
 
-### Stream Resources
-Stream a resource
-```cpp
-ResourceFileUtility::Loader RFULoader = new ResourceFileUtility::Loader();
-ResourceFileUtility::Info songInfo = RFULoader.info("song");
-ResourceFileUtility::Stream songStream = RFULoader.stream("song"); // stream data
-songStream.pos(0); // set stream position to beginning of file
-if(songInfo.inType == "FILE_FORMAT"){
-	// handle FILE_FORMAT
-	// get 4 bytes from selector, selector increments by 4
-	char modelBytes4 = songStream.get(4); // first 4 bytes
-	modelBytes4 = songStream.get(4); // next 4 bytes
-}
-```
-
-### Compile Resources With Progress
-Pack all resources in your json file to a single resource file
-```cpp
-unsigned fileNumber, sizeTotal, sizeCurrent, loadBarNumber;
-ResourceFileUtility::Compiler RFUCompiler = new ResourceFileUtility::Compiler();
-RFUCompiler.info("resources.json");
-ResourceFileUtility::FileList fileList = RFUCompiler.getFileList();
-fileNumber = fileList.size();
-RFUCompiler.estimate();
-sizeTotal = RFUCompiler.sizePending();
-while (true) {
-	sizeCurrent = 0;
-	for (int i = 0; i < fileNumber; i++) {
-		sizeCurrent += fileList[i]->processSize();
-	}
-	loadBarNumber = (unsigned int) (sizeCurrent / (double) sizeTotal * 20.0);
-	cout << std::string(loadBarNumber, '#') << std::string(20 - loadBarNumber, ' ') << " Progress\r";
-	if (sizeCurrent >= sizeTotal)
-		break;
-}
-RFUCompiler.pack("assets.data");
-sizeTotal = RFUCompiler.sizePending();
-while (true) {
-	sizeCurrent = 0;
-	for (int i = 0; i < fileNumber; i++) {
-		sizeCurrent += fileList[i]->processSize();
-	}
-	loadBarNumber = (unsigned int) (sizeCurrent / (double) sizeTotal * 20.0);
-	cout << std::string(loadBarNumber, '#') << std::string(20 - loadBarNumber, ' ') << " Progress\r";
-	if (sizeCurrent >= sizeTotal)
-		break;
-}
-```
-
-
-## C#
-add ```include/ResourceFileUtility.cs``` to your project<BR><BR>
-
-### Compile Resources
-Pack all resources in your json file to a single resource file
-```csharp
-ResourceFileUtility.Compiler RFUCompiler = new ResourceFileUtility.Compiler();
-RFUCompiler.info("resources.json");
-RFUCompiler.pack("assets.data");
-```
-
-### Load Resources
-Load a resource to memory and handle it
-```csharp
-ResourceFileUtility.Loader RFULoader = new ResourceFileUtility.Loader();
-ResourceFileUtility.Info coneInfo = RFULoader.info("cone");
-char modelBytes = RFULoader.open("cone"); //loads all cone data to memory
-if(coneInfo.inType == "FILE_FORMAT"){
-	// handle FILE_FORMAT
-}
-```
-
-### Stream Resources
-Stream a resource
-```csharp
-ResourceFileUtility.Loader RFULoader = new ResourceFileUtility.Loader();
-ResourceFileUtility.Info songInfo = RFULoader.info("song");
-ResourceFileUtility.Stream songStream = RFULoader.stream("song"); // stream data
-songStream.pos(0); // set stream position to beginning of file
-if(songInfo.inType == "FILE_FORMAT"){
-	// handle FILE_FORMAT
-	// get 4 bytes from selector, selector increments by 4
-	char modelBytes4 = songStream.get(4); // first 4 bytes
-	modelBytes4 = songStream.get(4); // next 4 bytes
-}
-```
 
 ## Dependency
-JSON for C++<BR>
+RapidJSON<BR>
 License: MIT<BR>
-https://github.com/nlohmann/json<BR>
+https://github.com/Tencent/rapidjson<BR>
 <BR>
 Boost<BR>
 License:  Boost Software License 1.0<BR>
