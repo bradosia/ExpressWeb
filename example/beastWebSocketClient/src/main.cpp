@@ -6,64 +6,66 @@
 #include <iostream>
 #include <string>
 
-using tcp = boost::asio::ip::tcp;               // from <boost/asio/ip/tcp.hpp>
-namespace websocket = boost::beast::websocket;  // from <boost/beast/websocket.hpp>
+using tcp = boost::asio::ip::tcp;
+// from <boost/asio/ip/tcp.hpp>
+namespace websocket = boost::beast::websocket;
+// from <boost/beast/websocket.hpp>
 
 // Sends a WebSocket message and prints the response
-int main(int argc, char** argv)
-{
-    try
-    {
-        // Check command line arguments.
-       /* if(argc != 4)
-        {
-            std::cerr <<
-                "Usage: websocket-client-sync <host> <port> <text>\n" <<
-                "Example:\n" <<
-                "    websocket-client-sync echo.websocket.org 80 \"Hello, world!\"\n";
-            return EXIT_FAILURE;
-        }*/
-        auto const host = "ws://demos.kaazing.com/echo";
-        auto const port = "80";
-        auto const text = "{\"type\":\"request\",\"data\":\"test\"}";
+int main(int argc, char** argv) {
+	try {
+		// Check command line arguments.
+		/* if(argc != 4)
+		 {
+		 std::cerr <<
+		 "Usage: websocket-client-sync <host> <port> <text>\n" <<
+		 "Example:\n" <<
+		 "    websocket-client-sync echo.websocket.org 80 \"Hello, world!\"\n";
+		 return EXIT_FAILURE;
+		 }*/
+		auto const host = "echo.websocket.org";
+		auto const port = "80";
+		auto const text = "{\"type\":\"request\",\"data\":\"test\"}";
 
-        // The io_context is required for all I/O
-        boost::asio::io_context ioc;
+		// The io_context is required for all I/O
+		boost::asio::io_context ioc;
 
-        // These objects perform our I/O
-        tcp::resolver resolver{ioc};
-        websocket::stream<tcp::socket> ws{ioc};
+		// These objects perform our I/O
+		tcp::resolver resolver { ioc };
+		websocket::stream < tcp::socket > ws { ioc };
 
-        // Look up the domain name
-        auto const results = resolver.resolve(host, port);
+		// Look up the domain name
+		auto const results = resolver.resolve(host, port);
 
-        // Make the connection on the IP address we get from a lookup
-        boost::asio::connect(ws.next_layer(), results.begin(), results.end());
+		// Make the connection on the IP address we get from a lookup
+		boost::asio::connect(ws.next_layer(), results.begin(), results.end());
 
-        // Perform the websocket handshake
-        ws.handshake(host, "/");
+		// Perform the websocket handshake
+		ws.handshake(host, "/");
 
-        // Send the message
-        ws.write(boost::asio::buffer(std::string(text)));
+		// Send the message
+		ws.write(boost::asio::buffer(std::string(text)));
 
-        // This buffer will hold the incoming message
-        boost::beast::multi_buffer buffer;
+		// This buffer will hold the incoming message
+		boost::beast::multi_buffer buffer;
 
-        // Read a message into our buffer
-        ws.read(buffer);
+		// Read a message into our buffer
+		ws.read(buffer);
 
-        // Close the WebSocket connection
-        ws.close(websocket::close_code::normal);
+		// Close the WebSocket connection
+		ws.close(websocket::close_code::normal);
 
-        // If we get here then the connection is closed gracefully
+		// If we get here then the connection is closed gracefully
 
-        // The buffers() function helps print a ConstBufferSequence
-        std::cout << boost::beast::buffers(buffer.data()) << std::endl;
-    }
-    catch(std::exception const& e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
+		// The buffers() function helps print a ConstBufferSequence
+		std::cout << boost::beast::buffers(buffer.data()) << std::endl;
+
+		std::cout << "Enter any key to exit...\n";
+		std::string temp;
+		std::getline(std::cin, temp);
+	} catch (std::exception const& e) {
+		std::cerr << "Error: " << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }

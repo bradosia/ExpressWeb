@@ -436,7 +436,7 @@ one_header:
 program_cpp_contrib: 
 	$(foreach CONTRIB_ELEMENT,$(PROGRAM_CPP_CONTRIB_LIST), \
 	cd $(LIBRARY_CONTRIB_DIR)/$(CONTRIB_ELEMENT) && make HOST_OS=$(HOST_OS) TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) \
-	$(CLI_MULTIPLE))
+	$(CLI_MULTIPLE) cd ../../$(CLI_MULTIPLE))
 	
 # Library shared and static
 library_setup:
@@ -467,7 +467,7 @@ library_clean:
 program_cpp_example:
 	$(foreach CONTRIB_ELEMENT,$(PROGRAM_CPP_EXAMPLE_LIST), \
 	cd $(LIBRARY_EXAMPLE_DIR)/$(CONTRIB_ELEMENT) && make HOST_OS=$(HOST_OS) TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) \
-	$(CLI_MULTIPLE))
+	$(CLI_MULTIPLE) cd ../../$(CLI_MULTIPLE))
 
 clean:
 	$(LIBRARY_TEMP_DIR_DEL)
