@@ -20,7 +20,6 @@ int main(int argc, char** argv) {
 	ifstream streamIn;
 	ofstream fileOutput;
 	OneHeader::Document doc;
-	OneHeader::Combine combine;
 	if (argc < 3) {
 		cout
 				<< "Use the program like this:\nOneHeader.exe ../../src/OneHeader.h ../../include/OneHeaderOutput.h\n";
@@ -62,7 +61,7 @@ int main(int argc, char** argv) {
 			includeFilePath.append(relativeDirectory).append(includeList[i]);
 			headerStreamIn.open(includeFilePath, ios::binary);
 			if (headerStreamIn.is_open()) {
-				combine.copy(headerStreamIn, fileOutput);
+				doc.copy(headerStreamIn, fileOutput);
 				fileOutput
 						<< "\n\n//--------------------------------------------\n//--------------------------------------------\n\n";
 				headerStreamIn.close();

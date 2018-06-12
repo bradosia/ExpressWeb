@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <stdarg.h>			// std::va_list
+#include <functional>			// std::function
 using namespace std;
 
 #define STREAM_SCANNER_BUFFER_SIZE 4096
@@ -16,23 +16,15 @@ namespace OneHeader {
  */
 class StreamScanner {
 public:
-	StreamScanner() {
-
-	}
-	virtual ~StreamScanner() {
-
-	}
-	bool scanStream(istream& streamIn, ...);
-	virtual bool bufferHandle(string& streamBuffer, bool final, va_list& args) {
-		return false;
-	}
+	static bool scanStream(istream& streamIn,
+			std::function<void(string&, bool)> bufferHandleCallback);
 };
 
 /**
  * @class Document
  * utilities for the reading the One Header document \n
  */
-class Document: public StreamScanner {
+class Document {
 public:
 	Document() {
 
@@ -41,26 +33,15 @@ public:
 
 	}
 	bool stream(ifstream &streamIn, vector<string> &includeList);
-	bool bufferHandle(string& streamBuffer, bool final, va_list& args);
-};
-
-/**
- * @class Combine
- * utilities for the combining One Header document \n
- */
-class Combine: public StreamScanner {
-public:
-	Combine() {
-
-	}
-	~Combine() {
-
-	}
+	bool streamBufferHandle(string& streamBuffer, bool final,
+			vector<string> &includeList);
 	bool copy(ifstream &streamIn, ofstream &streamOut);
-	bool bufferHandle(string& streamBuffer, bool final, va_list& args);
+	bool copyBufferHandle(string& streamBuffer, bool final,
+			ofstream &streamOut);
 };
 
-bool StreamScanner::scanStream(istream& streamIn, ...) {
+bool StreamScanner::scanStream(istream& streamIn,
+		std::function<void(string&, bool)> bufferHandleCallback) {
 	unsigned int fileSize, filePos, bufferSize, mode;
 	string streamBuffer;
 	bufferSize = STREAM_SCANNER_BUFFER_SIZE;
@@ -78,27 +59,24 @@ bool StreamScanner::scanStream(istream& streamIn, ...) {
 		memset(bufferInChar, 0, sizeof(bufferInChar)); // zero out buffer
 		streamIn.read(bufferInChar, bufferSize);
 		streamBuffer.append(bufferInChar, bufferSize);
-		va_list args;
-		va_start(args, &streamIn);
-		bufferHandle(streamBuffer, false, args);
-		va_end(args);
+		bufferHandleCallback(streamBuffer, false);
 		// advance buffer
 		filePos += bufferSize;
 	}
 	// handle the remaining buffer
-	va_list args;
-	va_start(args, &streamIn);
-	bufferHandle(streamBuffer, true, args);
-	va_end(args);
+	bufferHandleCallback(streamBuffer, true);
 	return true;
 }
 
 bool Document::stream(ifstream &streamIn, vector<string> &includeList) {
-	return scanStream(streamIn, &includeList);
+	return StreamScanner::scanStream(streamIn,
+			[this, &includeList](string& streamBuffer, bool final) {
+				streamBufferHandle(streamBuffer, final, includeList);
+			});
 }
 
-bool Document::bufferHandle(string& streamBuffer, bool final, va_list& args) {
-	vector<string>& includeList = va_arg(args, vector<string>);
+bool Document::streamBufferHandle(string& streamBuffer, bool final,
+		vector<string> &includeList) {
 	unsigned int mode;
 	size_t directiveStartPos, directiveEndPos;
 	mode = directiveStartPos = directiveEndPos = 0;
@@ -135,12 +113,15 @@ bool Document::bufferHandle(string& streamBuffer, bool final, va_list& args) {
 	return true;
 }
 
-bool Combine::copy(ifstream &streamIn, ofstream &streamOut) {
-	return scanStream(streamIn, &streamOut);
+bool Document::copy(ifstream &streamIn, ofstream &streamOut) {
+	return StreamScanner::scanStream(streamIn,
+			[this, &streamOut](string& streamBuffer, bool final) {
+				copyBufferHandle(streamBuffer, final, streamOut);
+			});
 }
 
-bool Combine::bufferHandle(string& streamBuffer, bool final, va_list& args) {
-	ostream& streamOut = va_arg(args, ostream);
+bool Document::copyBufferHandle(string& streamBuffer, bool final,
+		ofstream &streamOut) {
 	unsigned int mode;
 	size_t directiveStartPos, directiveEndPos;
 	mode = directiveStartPos = directiveEndPos = 0;

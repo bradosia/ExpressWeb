@@ -9,7 +9,7 @@ cd /Users/CKMo/Brad
 cd /home/demo
 
 # github reset
-cd ResourceFileUtility
+cd ExpressWeb
 git reset --hard
 git pull origin master
 
