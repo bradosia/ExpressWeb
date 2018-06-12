@@ -1,5 +1,5 @@
 # Name of the libraries and executable
-LIBRARY_CPP_NAME = OneHeader
+LIBRARY_CPP_NAME = example
 # Compiler and Dependency paths
 # HOST_OS the host OS
 # TARGET_OS the target OS
