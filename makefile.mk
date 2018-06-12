@@ -130,12 +130,17 @@ ifeq ($(HOST_OS),LINUX)
 	# platform specific libraries
 	# -l will be automatically prepended
 	LIBRARY_CPP_LINK_LIB_PLATFORM = 
+	BOOST_INCLUDE_DIR = /usr/local/include
+	BOOST_LIBS_DIR = /usr/local/lib
 	ifeq ($(COMPILER),GCC)
-		BOOST_INCLUDE_DIR = /usr/local/include
-		BOOST_LIBS_DIR = /usr/local/lib
-		BOOST_LIBS_POST =
 		GCC = g++
 		AR = ar 
+		ifeq ($(TARGET_ARCH),x86)
+			BOOST_LIBS_POST = -gcc49-mt-x32-1_67
+		endif
+		ifeq ($(TARGET_ARCH),x86_64)
+			BOOST_LIBS_POST = -gcc49-mt-x64-1_67
+		endif
 	endif
 endif
 PROGRAM_CPP_CONTRIB_LIST = crow
