@@ -6,6 +6,12 @@ LIBRARY_CPP_NAME = OneHeader
 # TARGET_ARCH the target architecture
 # COMPILER the host compiler
 ifeq ($(HOST_OS),WIN)
+	# platform specific include path
+	# -I will be automatically prepended
+	LIBRARY_CPP_COMPILE_INCLUDE_PATH_PLATFORM =
+	# platform specific library path
+	# -L will be automatically prepended
+	LIBRARY_CPP_LINK_LIB_PATH_PLATFORM = 
 	# platform specific libraries
 	# -l will be automatically prepended
 	LIBRARY_CPP_LINK_LIB_PLATFORM = ws2_32
@@ -115,6 +121,15 @@ ifeq ($(HOST_OS),OSX)
 	endif
 endif
 ifeq ($(HOST_OS),LINUX)
+	# platform specific include path
+	# -I will be automatically prepended
+	LIBRARY_CPP_COMPILE_INCLUDE_PATH_PLATFORM = /usr/include
+	# platform specific library path
+	# -L will be automatically prepended
+	LIBRARY_CPP_LINK_LIB_PATH_PLATFORM = /usr/lib
+	# platform specific libraries
+	# -l will be automatically prepended
+	LIBRARY_CPP_LINK_LIB_PLATFORM = 
 	ifeq ($(COMPILER),GCC)
 		BOOST_INCLUDE_DIR = /usr/local/include
 		BOOST_LIBS_DIR = /usr/local/lib
