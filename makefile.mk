@@ -144,7 +144,7 @@ ifeq ($(HOST_OS),LINUX)
 	endif
 endif
 PROGRAM_CPP_CONTRIB_LIST = crow
-PROGRAM_CPP_EXAMPLE_LIST = beastHTTPClient
+PROGRAM_CPP_EXAMPLE_LIST = beastHTTPClient beastWebSocketClient
 LIBRARY_CONTRIB_PARENT_DIR = .
 LIBRARY_EXAMPLE_PARENT_DIR = .
 # -L will be automatically prepended
