@@ -163,7 +163,7 @@ ifeq ($(COMPILER),GCC)
 		LIBRARY_COMPILE_INCLUDE_PATH_STANDARD = -I"$(LIBRARY_INCLUDE_DIR)"
 		LIBRARY_COMPILE_FLAGS_STANDARD = -m32 -O3 -g3 -std=$(LIBRARY_CPP_VERSION) -Wall
 		LIBRARY_SHARED_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -shared
-		LIBRARY_EXE_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++
+		LIBRARY_EXE_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -static
 		LIBRARY_LINK_LIBS_STANDARD = -lstdc++
 		PROGRAM_CPP_COMPILE_FLAGS_STANDARD = -O3 -g3 -std=$(PROGRAM_CPP_VERSION) -Wall -fPIC
 		PROGRAM_CPP_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -static
@@ -173,7 +173,7 @@ ifeq ($(COMPILER),GCC)
 		LIBRARY_COMPILE_INCLUDE_PATH_STANDARD = -I"$(LIBRARY_INCLUDE_DIR)"
 		LIBRARY_COMPILE_FLAGS_STANDARD = -O3 -g3 -std=$(LIBRARY_CPP_VERSION) -Wall
 		LIBRARY_SHARED_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -shared
-		LIBRARY_EXE_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++
+		LIBRARY_EXE_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -static
 		LIBRARY_LINK_LIBS_STANDARD = -lstdc++
 		PROGRAM_CPP_COMPILE_FLAGS_STANDARD = -O3 -g3 -std=$(PROGRAM_CPP_VERSION) -Wall -fPIC
 		PROGRAM_CPP_LINK_FLAGS_STANDARD = -static-libgcc -static-libstdc++ -static
