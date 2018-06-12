@@ -37,6 +37,8 @@ Unfortunately, there is not no mysql connector that can accompany this list. The
 
 # Build Instructions
 
+No searching around and configuring all the dependencies. All sources are in ```contrib``` and certain libraries are already pre-compiled in ```lib```. After installing boost and configuring paths in the makefile.mk, simply run the make command.
+
 ## Prerequisites
 Install boost libraries<BR>
 The current make script was created for a versioned layout installation of boost:
