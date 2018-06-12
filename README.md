@@ -118,7 +118,7 @@ make HOST_OS=OSX TARGET_OS=IOS TARGET_ARCH=x86_64 IPHONE_SDK_PATH=/Applications/
 ## Creating a server
 
 ### node.js + hapi.js
-```nodejs
+```node
 const Hapi = require('hapi');
 const server = new Hapi.Server();
 server.connection({ port: 3000 });
