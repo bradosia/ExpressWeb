@@ -1,5 +1,23 @@
-# ResourceFileUtility
-A select port of node.js and hapi to c++. 
+# ExpressWeb
+A hand-picked HTTP and WebSocket toolkit for C++. This criteria for the selection was compatibility with MSVC, mingw, GCC, and clang and free use for commercial applications.
+
+| Library				| Purpose					|
+| :---					| :---						|
+| Boost::Asio			| Networking 				|
+| Boost::Beast			| HTTP and WebSocket		|
+| Boost::Filesystem		| Filesystem				|
+| Boost::nowide			| utf8 support				|
+| crow					| HTTP Router				|
+| rapidJSON				| JSON parser				|
+| bustache				| templating and views		|
+| openssl				| SSL						|
+| curl/lib/cookie.c		| HTTP cookie parser		|
+| ua-parser/uap-cpp		| HTTP User agent parser	|
+| jbeder/yaml-cpp		| YAML parser				|
+
+Boost::Beast does simple HTTP header parsing of each firld with name/value pairs. <BR>
+Boost::Beast does not do cookie parsing, Forms/File Uploads, or User Agent parsing.
+Unfortunately, there is not no mysql connector that can accompany this list. The official MySQL connector does not compile in mingw.
 
 # Table of Contents
 
@@ -7,14 +25,12 @@ A select port of node.js and hapi to c++.
    * [Build Instructions](#build-instructions)
    * [Supported](#supported)
    * [Usage Instructions](#usage-instructions)
-      * [C++](#c)
-         * [Compile Resources](#compile-resources)
-         * [Load Resources](#load-resources)
-         * [Stream Resources](#stream-resources)
-      * [C#](#c-1)
-         * [Compile Resources](#compile-resources-1)
-         * [Load Resources](#load-resources-1)
-         * [Stream Resources](#stream-resources-1)
+      * [Creating a server](#Creating a server)
+         * [node.js + hapi.js](#node.js + hapi.js-1)
+         * [C++](#c-1)
+      * [HTTP Routing](#HTTP Routing)
+         * [node.js + hapi.js](#node.js + hapi.js-1)
+         * [C++](#c-1)
    * [Dependency](#dependency)
    * [License](#license)
 <!--te-->
@@ -23,9 +39,22 @@ A select port of node.js and hapi to c++.
 
 ## Prerequisites
 Install boost libraries<BR>
-You can manually edit the makefile or make with boost include and library paths like so:
-```sh
-make OS_DET=WIN TARGET_ARCH=x86_64 BOOST_INCLUDE_DIR=C:/boost/include/boost-1_67 BOOST_LIBS_DIR=C:/boost/lib-mgw BOOST_LIBS_POST=-mgw73-mt-x64-1_67
+The current make script was created for a versioned layout installation of boost:
+```shell
+./b2 toolset=gcc stage --build-type=complete --layout=versioned
+```
+Go into the makefile.mk and change the ```BOOST_LIBS_POST``` directive to the correct version. <BR> 
+The version for GCC 4.9 on a 32-bit machine for boost 1.67 would look like this:
+```make
+BOOST_LIBS_POST = -gcc49-mt-x32-1_67
+```
+The version for MinGW-w64 7.3 on a 64-bit machine for boost 1.67 would look like this:
+```make
+BOOST_LIBS_POST = -mgw73-mt-x64-1_67
+```
+If you built boost with ```--layout=system``` then keep the version blank:
+```make
+BOOST_LIBS_POST = 
 ```
 
 ## Windows
@@ -115,7 +144,7 @@ server.start((err) => {
 });
 ```
 
-## Creating a server
+## HTTP Routing
 
 ### node.js + hapi.js
 ```nodejs
@@ -182,13 +211,20 @@ server.start((err) => {
 
 
 ## Dependency
-RapidJSON<BR>
-License: MIT<BR>
-https://github.com/Tencent/rapidjson<BR>
-<BR>
-Boost<BR>
-License:  Boost Software License 1.0<BR>
-https://www.boost.org<BR>
+
+| Library				| License						| Link														|
+| :---					| :---							| :---														|
+| Boost::Asio			| Boost Software License 1.0 	| https://github.com/boostorg/asio 							|
+| Boost::Beast			| Boost Software License 1.0	| https://github.com/boostorg/beast							|
+| Boost::Filesystem		| Boost Software License 1.0	| 															|
+| Boost::nowide			| Boost Software License 1.0	| https://github.com/artyom-beilis/nowide					|
+| crow					| attribute						| https://github.com/ipkn/crow								|
+| rapidJSON				| MIT							| https://github.com/Tencent/rapidjson						|
+| bustache				| Boost Software License 1.0	| https://github.com/jamboree/bustache						|
+| openssl				| attribute						| https://github.com/openssl/openssl						|
+| curl/lib/cookie.c		| MIT-style						| https://github.com/curl/curl/blob/master/lib/cookie.c		|
+| ua-parser/uap-cpp		| MIT							| https://github.com/ua-parser/uap-cpp						|
+| jbeder/yaml-cpp		| MIT							| https://github.com/jbeder/yaml-cpp						|
 
 # License
 The library is licensed under the MIT License: <BR>

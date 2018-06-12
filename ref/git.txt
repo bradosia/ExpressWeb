@@ -1,6 +1,6 @@
 # using git on darwin
 # creates directory automatically 
-git clone https://github.com/bradosia/ResourceFileUtility
+git clone https://github.com/bradosia/ExpressWeb
 
 #mac
 cd /Users/CKMo/Brad
@@ -47,3 +47,7 @@ gzcat Test.monad | tar xf -
 
 #MinGW-W64 GCC-7.3.0
 #x86_64-posix-sjlj
+
+#ExpressWeb Examples
+/home/demo/ExpressWeb/example/beastHTTPClient/bin/linux-x86_64-gcc/example
+/home/demo/ExpressWeb/example/beastWebSocketClient/bin/linux-x86_64-gcc/example
