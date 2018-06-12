@@ -147,7 +147,7 @@ server.start((err) => {
 ## HTTP Routing
 
 ### node.js + hapi.js
-```nodejs
+```node
 const Hapi = require('hapi');
 
 const server = Hapi.server({
