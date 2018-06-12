@@ -15,9 +15,9 @@ A hand-picked HTTP and WebSocket toolkit for C++. This criteria for the selectio
 | ua-parser/uap-cpp		| HTTP User agent parser	|
 | jbeder/yaml-cpp		| YAML parser				|
 
-Boost::Beast does simple HTTP header parsing of each firld with name/value pairs. <BR>
-Boost::Beast does not do cookie parsing, Forms/File Uploads, or User Agent parsing.
-Unfortunately, there is not no mysql connector that can accompany this list. The official MySQL connector does not compile in mingw.
+Boost::Beast does simple HTTP header parsing of each field with name/value pairs. <BR>
+Boost::Beast does not do cookie parsing, Forms/File Uploads, or User Agent parsing. <BR>
+Unfortunately, there is not no mysql connector that can accompany this list. The official MySQL connector does not compile on mingw.
 
 # Table of Contents
 
@@ -112,7 +112,7 @@ make HOST_OS=OSX TARGET_OS=IOS TARGET_ARCH=x86_64 IPHONE_SDK_PATH=/Applications/
 | macOS   | iOS       | arm64        | O    | ``` make HOST_OS=OSX TARGET_OS=IOS TARGET_ARCH=arm64 ``` |
 | macOS   | iOS       | x86_64       | O    | ``` make HOST_OS=OSX TARGET_OS=IOS TARGET_ARCH=x86_64 ``` |
 | linux ubuntu | linux ubuntu | x86     | O    | ``` make HOST_OS=LINUX TARGET_ARCH=x86 ``` |
-| linux ubuntu | linux ubuntu | x86_64  | O    | ``` make HOST_OS=LINUX TARGET_ARCH=x86_64 ``` |
+| linux ubuntu | linux ubuntu | x86_64  | X    | ``` make HOST_OS=LINUX TARGET_ARCH=x86_64 ``` |
  
 # Usage Instructions
 ## Creating a server
