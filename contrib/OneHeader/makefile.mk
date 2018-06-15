@@ -89,7 +89,7 @@ ifeq ($(HOST_OS),OSX)
 	ifeq ($(COMPILER),CLANG)
 		BOOST_INCLUDE_DIR = /opt/boost/include
 		BOOST_LIBS_DIR = /opt/boost/lib
-		BOOST_LIBS_POST = -clang-darwin42-mt-x64-1_67.a
+		BOOST_LIBS_POST = -clang-darwin42-mt-x64-1_67
 		ifeq ($(TARGET_ARCH),x86)
 			GCC = clang++
 			AR = ar
