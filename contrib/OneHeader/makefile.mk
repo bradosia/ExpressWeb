@@ -89,7 +89,7 @@ ifeq ($(HOST_OS),OSX)
 	ifeq ($(COMPILER),CLANG)
 		BOOST_INCLUDE_DIR = /opt/boost/include
 		BOOST_LIBS_DIR = /opt/boost/lib
-		BOOST_LIBS_POST = -clang-darwin42-mt-x64-1_67.a
+		BOOST_LIBS_POST = -clang-darwin42-mt-x64-1_67
 		ifeq ($(TARGET_ARCH),x86)
 			GCC = clang++
 			AR = ar
@@ -158,7 +158,7 @@ LIBRARY_CPP_LINK_LIB_PATHS_VERSION =
 LIBRARY_CPP_LINK_LIBS = 
 # the boost version will be appended to each item on this list
 # -l will be automatically prepended
-LIBRARY_CPP_LINK_LIBS_VERSION_BOOST = libboost_filesystem libboost_thread libboost_locale libboost_system libboost_iostreams
+LIBRARY_CPP_LINK_LIBS_VERSION_BOOST = boost_filesystem boost_thread boost_locale boost_system boost_iostreams
 
 # -L will be automatically prepended
 PROGRAM_CPP_LINK_LIB_PATHS = 
