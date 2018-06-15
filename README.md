@@ -58,6 +58,7 @@ If you built boost with ```--layout=system``` then keep the version blank:
 ```make
 BOOST_LIBS_POST = 
 ```
+NOTE: for macOS you need to remove all the .dylibs because we want the .a
 
 ## Windows
 Only Windows host<BR>

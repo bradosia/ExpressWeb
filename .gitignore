@@ -1,9 +1,9 @@
 /projectVC2017/.vs
 /projectVC2017/Debug
-/projectEclipse/win64_mingw
-/example/beastHTTPClient/bin
-/example/beastHTTPServer/bin
-/example/beastWebSocketClient/bin
-/example/beastWebSocketClientAsync/bin
-/example/ServerCreate/bin
-/example/ServerRoute/bin
+/projectEclipse/win64_mingw/
+/example/beastHTTPClient/bin/
+/example/beastHTTPServer/bin/
+/example/beastWebSocketClient/bin/
+/example/beastWebSocketClientAsync/bin/
+/example/ServerCreate/bin/
+/example/ServerRoute/bin/
