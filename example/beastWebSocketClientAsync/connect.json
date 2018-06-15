@@ -1,6 +1,6 @@
 {
-	"host": "monad.monar.ch",
-	"port": "25566",
+	"host": "echo.websocket.org",
+	"port": "80",
 	"scheme": "ws",
 	"target": "/",
 	"request": {
