@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
 		boost::string_view configurationFilePathView = "../../connect.json";
 		boost::optional < boost::string_view > clientHost;
 		boost::optional < boost::string_view > clientPort;
+		boost::optional < boost::string_view > clientTarget;
 		boost::optional<std::string> clientRequest;
 		if (argc > 1) {
 			configurationFilePathView = argv[1];
@@ -80,6 +81,11 @@ int main(int argc, char** argv) {
 				clientPort = boost::string_view(
 						jsonDocument["port"].GetString());
 			}
+			if (jsonDocument.HasMember("target")
+					&& jsonDocument["target"].IsString()) {
+				clientTarget = boost::string_view(
+						jsonDocument["target"].GetString());
+			}
 			if (jsonDocument.HasMember("request")
 					&& jsonDocument["request"].IsObject()) {
 				rapidjson::StringBuffer buffer;
@@ -89,7 +95,7 @@ int main(int argc, char** argv) {
 				clientRequest = buffer.GetString();
 			}
 		}
-		if (clientHost && clientPort && clientRequest) {
+		if (clientHost && clientPort && clientTarget && clientRequest) {
 			std::cout
 					<< "Found the required information from the configuration file.\n";
 		} else {
@@ -114,7 +120,7 @@ int main(int argc, char** argv) {
 		boost::asio::connect(ws.next_layer(), results.begin(), results.end());
 
 		// Perform the websocket handshake
-		ws.handshake(*clientHost, "/");
+		ws.handshake(*clientHost, *clientTarget);
 
 		// Send the message
 		ws.write(boost::asio::buffer(std::string((*clientRequest).data())));
