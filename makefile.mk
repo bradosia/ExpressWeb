@@ -143,10 +143,12 @@ ifeq ($(HOST_OS),LINUX)
 		endif
 	endif
 endif
-PROGRAM_CPP_CONTRIB_LIST = crow
-PROGRAM_CPP_EXAMPLE_LIST = beastHTTPClient beastWebSocketClient
+PROGRAM_CPP_CONTRIB_LIST = rapidjson
+PROGRAM_CPP_EXAMPLE_LIST = beastHTTPClient beastWebSocketClient beastHTTPServer
 LIBRARY_CONTRIB_PARENT_DIR = .
 LIBRARY_EXAMPLE_PARENT_DIR = .
+# -I will be automatically prepended
+LIBRARY_CPP_COMPILE_INCLUDE_PATH = include
 # -L will be automatically prepended
 LIBRARY_CPP_LINK_LIB_PATHS = 
 # the version directory will be appended to each item on this list
@@ -166,8 +168,10 @@ PROGRAM_CPP_LINK_LIB_PATHS_VERSION = lib bin
 # -l will be automatically prepended
 PROGRAM_CPP_LINK_LIBS = $(LIBRARY_CPP_NAME)
 
+# Build OneHeader utility
+PROGRAM_ONE_HEADER_BUILD_FLAG=1
 # Use OneHeader utility to create a single include header
-PROGRAM_ONE_HEADER_FLAG=1
+PROGRAM_ONE_HEADER_USE_FLAG=1
 # Make Static Library
 LIBRARY_CPP_STATIC_BIN_FLAG=1
 # Make Shared Library

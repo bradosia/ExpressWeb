@@ -1,0 +1,9 @@
+{
+	"host": "echo.websocket.org",
+	"port": "80",
+	"request": {
+		"guid": "4574me64ndbr5mudn",
+		"type": "greeting",
+		"kind": "request"
+	}
+}

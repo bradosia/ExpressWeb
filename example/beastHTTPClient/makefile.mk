@@ -1,5 +1,5 @@
 # Name of the libraries and executable
-LIBRARY_CPP_NAME = example
+LIBRARY_CPP_NAME = ExpressWeb
 # Compiler and Dependency paths
 # HOST_OS the host OS
 # TARGET_OS the target OS
@@ -147,13 +147,15 @@ PROGRAM_CPP_CONTRIB_LIST =
 PROGRAM_CPP_EXAMPLE_LIST = 
 LIBRARY_CONTRIB_PARENT_DIR = ../..
 LIBRARY_EXAMPLE_PARENT_DIR = ../..
+# -I will be automatically prepended
+LIBRARY_CPP_COMPILE_INCLUDE_PATH = $(LIBRARY_EXAMPLE_PARENT_DIR)/include
 # -L will be automatically prepended
 LIBRARY_CPP_LINK_LIB_PATHS = 
 # the version directory will be appended to each item on this list
 # -L will be automatically prepended
-LIBRARY_CPP_LINK_LIB_PATHS_VERSION = $(LIBRARY_CONTRIB_PARENT_DIR)/lib
+LIBRARY_CPP_LINK_LIB_PATHS_VERSION = $(LIBRARY_EXAMPLE_PARENT_DIR)/lib
 # -l will be automatically prepended
-LIBRARY_CPP_LINK_LIBS = ssl crypto
+LIBRARY_CPP_LINK_LIBS = 
 # the boost version will be appended to each item on this list
 # -l will be automatically prepended
 LIBRARY_CPP_LINK_LIBS_VERSION_BOOST = boost_filesystem boost_thread boost_locale boost_system boost_iostreams
@@ -162,12 +164,14 @@ LIBRARY_CPP_LINK_LIBS_VERSION_BOOST = boost_filesystem boost_thread boost_locale
 PROGRAM_CPP_LINK_LIB_PATHS = 
 # the version directory will be appended to each item on this list
 # -L will be automatically prepended
-PROGRAM_CPP_LINK_LIB_PATHS_VERSION = 
+PROGRAM_CPP_LINK_LIB_PATHS_VERSION = lib bin
 # -l will be automatically prepended
-PROGRAM_CPP_LINK_LIBS = 
+PROGRAM_CPP_LINK_LIBS = $(LIBRARY_CPP_NAME)
 
+# Build OneHeader utility
+PROGRAM_ONE_HEADER_BUILD_FLAG=0
 # Use OneHeader utility to create a single include header
-PROGRAM_ONE_HEADER_FLAG=0
+PROGRAM_ONE_HEADER_USE_FLAG=0
 # Make Static Library
 LIBRARY_CPP_STATIC_BIN_FLAG=0
 # Make Shared Library
