@@ -2,7 +2,7 @@
 	"host": "echo.websocket.org",
 	"port": "80",
 	"request": {
-		"guid": "4574me64ndbr5mudn",
+		"guid": "cad2e02b-b7e5-4c2e-8418-d1e6f446d0b6",
 		"type": "greeting",
 		"kind": "request"
 	}
