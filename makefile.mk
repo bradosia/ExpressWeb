@@ -173,9 +173,9 @@ PROGRAM_ONE_HEADER_BUILD_FLAG=1
 # Use OneHeader utility to create a single include header
 PROGRAM_ONE_HEADER_USE_FLAG=1
 # Make Static Library
-LIBRARY_CPP_STATIC_BIN_FLAG=1
+LIBRARY_CPP_STATIC_BIN_FLAG=0
 # Make Shared Library
-LIBRARY_CPP_SHARED_BIN_FLAG=1
+LIBRARY_CPP_SHARED_BIN_FLAG=0
 # Make Executable
 LIBRARY_CPP_EXE_BIN_FLAG=0
 # Make contributed libraries (typically they are dependencies too)
