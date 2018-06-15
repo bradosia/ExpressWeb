@@ -375,13 +375,13 @@ ifeq ($(TARGET_OS),OSX)
 	LIBRARY_COMPILE_FLAGS = $(LIBRARY_COMPILE_FLAGS_STANDARD) -mmacosx-version-min=10.9 
 	
 	LIBRARY_EXE_LINK_FLAGS = $(LIBRARY_EXE_LINK_FLAGS_STANDARD) \
-		-current_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9
+		-fvisibility=hidden -mmacosx-version-min=10.9
 	LIBRARY_EXE_LINK_LIB_PATH = $(LIBRARY_LINK_LIBS_PATH_STANDARD) $(LIBRARY_CPP_LINK_LIB_PATHS_L) $(LIBRARY_CPP_LINK_LIB_PATHS_VERSION_L) \
 		-L"$(BOOST_LIBS_DIR)" $(LIBRARY_CPP_LINK_LIB_PATH_PLATFORM_L)
 	LIBRARY_EXE_LINK_LIBS = $(LIBRARY_LINK_LIBS_STANDARD) $(LIBRARY_CPP_LINK_LIBS_l) $(LIBRARY_CPP_LINK_LIBS_VERSION_BOOST_l) \
 		$(LIBRARY_CPP_LINK_LIB_PLATFORM_l)
 	
-	LIBRARY_SHARED_LINK_FLAGS = $(LIBRARY_EXE_LINK_FLAGS) -shared -dynamiclib -compatibility_version 1.0
+	LIBRARY_SHARED_LINK_FLAGS = $(LIBRARY_EXE_LINK_FLAGS) -shared -dynamiclib -current_version 1.0 -compatibility_version 1.0
 	LIBRARY_SHARED_LINK_LIB_PATH = $(LIBRARY_EXE_LINK_LIB_PATH)
 	LIBRARY_SHARED_LINK_LIBS = $(LIBRARY_EXE_LINK_LIBS)
 	LIBRARY_STATIC_LINK_FLAGS = 
@@ -390,7 +390,7 @@ ifeq ($(TARGET_OS),OSX)
 	# OneHeader c++
 	PROGRAM_ONE_HEADER_COMPILE_FLAGS = $(PROGRAM_CPP_COMPILE_FLAGS_STANDARD) -mmacosx-version-min=10.9
 	PROGRAM_ONE_HEADER_LINK_FLAGS = $(PROGRAM_CPP_LINK_FLAGS_STANDARD) \
-		-current_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9
+		-fvisibility=hidden -mmacosx-version-min=10.9
 endif
 ifeq ($(TARGET_OS),IOS)
 	# cpp library commands and flags
