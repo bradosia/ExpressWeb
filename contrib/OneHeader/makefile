@@ -157,7 +157,7 @@ ifeq ($(COMPILER),CLANG)
 	LIBRARY_LINK_LIBS_STANDARD = -lstdc++ -lm -stdlib=libc++
 	PROGRAM_CPP_COMPILE_FLAGS_STANDARD = -O3 -g3 -std=$(PROGRAM_CPP_VERSION) -Wall 
 	PROGRAM_CPP_LINK_FLAGS_STANDARD = -static
-	PROGRAM_LINK_LIBS_STANDARD = -lstdc++ -lm -stdlib=libc++
+	PROGRAM_LINK_LIBS_STANDARD = -lc++ -lm
 endif
 ifeq ($(COMPILER),MINGW)
 	COMPILER_NAME = mingw
