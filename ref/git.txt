@@ -15,14 +15,13 @@ git pull origin master
 
 # build command
 make HOST_OS=LINUX TARGET_ARCH=x86_64
+make HOST_OS=OSX TARGET_ARCH=x86_64
 
-make
-mono example/example_csharp.exe
-mono --debug example/example_csharp.exe
-
-mono example/example_cpp.exe
-
-example/example_csharp
+#run programs
+./Users/CKMo/Brad/ExpressWeb/example/beastHTTPClient/bin/osx-x86_64-clang/example
+/Users/CKMo/Brad/ExpressWeb/example/beastHTTPServer/bin/osx-x86_64-clang/example
+/Users/CKMo/Brad/ExpressWeb/example/beastWebSocketClient/bin/osx-x86_64-clang/example
+/Users/CKMo/Brad/ExpressWeb/example/beastWebSocketClientAsync/bin/osx-x86_64-clang/example
 
 # github commit
 git status
