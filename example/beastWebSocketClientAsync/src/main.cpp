@@ -60,10 +60,10 @@ private:
 	tcp::resolver TCP_resolver_;
 	websocket::stream<tcp::socket> websocketStream;
 	boost::beast::multi_buffer buffer_;
-	boost::string_view host_;
-	boost::string_view port_;
-	boost::string_view scheme_;
-	boost::string_view target_;
+	boost::string_view clientHost_;
+	boost::string_view clientPort_;
+	boost::string_view clientScheme_;
+	boost::string_view clientTarget_;
 	std::string requestMessage_;
 	std::string hostAuthority;
 	boost::optional<headerMap_t> headerMap_;
@@ -76,22 +76,22 @@ public:
 	}
 
 	// Start the asynchronous operation
-	void run(boost::string_view& host, boost::string_view& port,
-			boost::string_view& scheme, boost::string_view& target,
+	void run(boost::string_view& clientHost, boost::string_view& clientPort,
+			boost::string_view& clientScheme, boost::string_view& clientTarget,
 			std::string& requestMessage,
 			boost::optional<headerMap_t>& headerMap) {
 		// Save these for later
-		host_ = host;
-		port_ = port;
-		scheme_ = scheme;
-		hostAuthority = std::string(host.data()).append(":").append(
-				port.data());
-		target_ = target;
+		clientHost_ = clientHost;
+		clientPort_ = clientPort;
+		clientScheme_ = clientScheme;
+		hostAuthority = std::string(clientHost_.data()).append(":").append(
+				clientPort_.data());
+		clientTarget_ = clientTarget;
 		requestMessage_ = requestMessage;
 		headerMap_ = headerMap;
 
 		// Look up the domain name
-		TCP_resolver_.async_resolve(host.data(), port.data(),
+		TCP_resolver_.async_resolve(clientHost_.data(), clientPort_.data(),
 				std::bind(&session::on_resolve, shared_from_this(),
 						std::placeholders::_1, std::placeholders::_2));
 	}
@@ -113,12 +113,12 @@ public:
 			return fail(ec, "connect");
 
 		// Perform the websocket handshake
-		websocketStream.async_handshake_ex(HTTP_response, host_, target_,
+		websocketStream.async_handshake_ex(HTTP_response, clientHost_, clientTarget_,
 				[this](websocket::request_type& HTTP_request)
 				{
 					// websocket-sharp authentication fails unless the port is present for a non standard host port
-					HTTP_request.set("Host", (port_ == "80" && scheme_ == "ws") || (port_ == "443" && scheme_ == "wss")
-							? host_
+					HTTP_request.set("Host", (clientPort_ == "80" && clientScheme_ == "ws") || (clientPort_ == "443" && clientScheme_ == "wss")
+							? clientHost_
 							: hostAuthority);
 					// An optional header map defined in the configuration file
 					if(headerMap_) {

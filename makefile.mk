@@ -144,7 +144,7 @@ ifeq ($(HOST_OS),LINUX)
 	endif
 endif
 PROGRAM_CPP_CONTRIB_LIST = rapidjson
-PROGRAM_CPP_EXAMPLE_LIST = beastWebSocketClientAsync beastHTTPClient beastWebSocketClient beastHTTPServer
+PROGRAM_CPP_EXAMPLE_LIST = beastWebSocketClient beastWebSocketClientAsync beastHTTPClient beastHTTPServer
 LIBRARY_CONTRIB_PARENT_DIR = .
 LIBRARY_EXAMPLE_PARENT_DIR = .
 # -I will be automatically prepended

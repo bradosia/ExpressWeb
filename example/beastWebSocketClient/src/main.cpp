@@ -13,6 +13,7 @@
 #endif
 
 using tcp = boost::asio::ip::tcp;
+using headerMap_t = std::unordered_map<std::string, boost::string_view>;
 // from <boost/asio/ip/tcp.hpp>
 namespace websocket = boost::beast::websocket;
 // from <boost/beast/websocket.hpp>
@@ -33,10 +34,12 @@ int main(int argc, char** argv) {
 	std::string temp;
 	try {
 		boost::string_view configurationFilePathView = "../../connect.json";
-		boost::optional < boost::string_view > clientHost;
-		boost::optional < boost::string_view > clientPort;
-		boost::optional < boost::string_view > clientTarget;
+		boost::optional<boost::string_view> clientHost;
+		boost::optional<boost::string_view> clientPort;
+		boost::optional<boost::string_view> clientScheme;
+		boost::optional<boost::string_view> clientTarget;
 		boost::optional<std::string> clientRequest;
+		boost::optional<headerMap_t> clientHeaders;
 		if (argc > 1) {
 			configurationFilePathView = argv[1];
 		}
@@ -81,18 +84,39 @@ int main(int argc, char** argv) {
 				clientPort = boost::string_view(
 						jsonDocument["port"].GetString());
 			}
+			if (jsonDocument.HasMember("scheme")
+					&& jsonDocument["scheme"].IsString()) {
+				clientScheme = boost::string_view(
+						jsonDocument["scheme"].GetString());
+			}
 			if (jsonDocument.HasMember("target")
 					&& jsonDocument["target"].IsString()) {
 				clientTarget = boost::string_view(
 						jsonDocument["target"].GetString());
 			}
-			if (jsonDocument.HasMember("request")
-					&& jsonDocument["request"].IsObject()) {
-				rapidjson::StringBuffer buffer;
-				buffer.Clear();
-				rapidjson::Writer < rapidjson::StringBuffer > writer(buffer);
-				jsonDocument["request"].Accept(writer);
-				clientRequest = buffer.GetString();
+			if (jsonDocument.HasMember("request")) {
+				if (jsonDocument["request"].IsObject()) {
+					// If request is an object, then serialize as a string
+					rapidjson::StringBuffer buffer;
+					buffer.Clear();
+					rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+					jsonDocument["request"].Accept(writer);
+					clientRequest = buffer.GetString();
+				} else if (jsonDocument["request"].IsString()) {
+					clientRequest = jsonDocument["request"].GetString();
+				}
+			}
+			if (jsonDocument.HasMember("headers")
+					&& jsonDocument["headers"].IsObject()) {
+				// construct the optional header map
+				headerMap_t headerMap;
+				for (auto& m : jsonDocument["headers"].GetObject()) {
+					if (m.name.IsString() && m.value.IsString()) {
+						headerMap.emplace(m.name.GetString(),
+								boost::string_view(m.value.GetString()));
+					}
+				}
+				clientHeaders = headerMap;
 			}
 		}
 		if (clientHost && clientPort && clientTarget && clientRequest) {
@@ -110,29 +134,54 @@ int main(int argc, char** argv) {
 
 		// These objects perform our I/O
 		tcp::resolver resolver { ioc };
-		websocket::stream < tcp::socket > ws { ioc };
+		websocket::stream<tcp::socket> websocketStream { ioc };
 
 		// Look up the domain name
 		auto const results = resolver.resolve((*clientHost).data(),
 				(*clientPort).data());
 
 		// Make the connection on the IP address we get from a lookup
-		boost::asio::connect(ws.next_layer(), results.begin(), results.end());
+		boost::asio::connect(websocketStream.next_layer(), results.begin(),
+				results.end());
 
 		// Perform the websocket handshake
-		ws.handshake(*clientHost, *clientTarget);
+		websocket::response_type HTTP_response;
+		websocketStream.handshake_ex(HTTP_response, *clientHost, *clientTarget,
+				[&](websocket::request_type& HTTP_request)
+				{
+					std::string hostAuthority = std::string((*clientHost).data()).append(":").append(
+							(*clientPort).data());
+					// websocket-sharp authentication fails unless the port is present for a non standard host port
+					HTTP_request.set("Host", (*clientPort == "80" && *clientScheme == "ws") || (*clientPort == "443" && *clientScheme == "wss")
+							? *clientHost
+							: hostAuthority);
+					// An optional header map defined in the configuration file
+					if(clientHeaders) {
+						for(auto i : *clientHeaders)
+						{
+							HTTP_request.insert(i.first, i.second);
+						}
+					}
+					// Let's see what our HTTP request is
+					std::cout << "HTTP Request Headers:\n";
+					std::cout << HTTP_request << "\n";
+				});
+		// Let's see what our HTTP response is
+		std::cout << "HTTP Response Headers:\n";
+		std::cout << HTTP_response << "\n";
 
 		// Send the message
-		ws.write(boost::asio::buffer(std::string((*clientRequest).data())));
+		websocketStream.write(
+				boost::asio::buffer(std::string((*clientRequest).data())));
 
 		// This buffer will hold the incoming message
 		boost::beast::multi_buffer buffer;
 
 		// Read a message into our buffer
-		ws.read(buffer);
+		websocketStream.read(buffer);
 
 		// Close the WebSocket connection
-		ws.close(websocket::close_code::normal);
+		websocketStream.close(websocket::close_code::normal);
 
 		// If we get here then the connection is closed gracefully
 

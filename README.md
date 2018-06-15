@@ -7,7 +7,6 @@ A hand-picked HTTP and WebSocket toolkit for C++. This criteria for the selectio
 | Boost::Beast			| HTTP and WebSocket		|
 | Boost::Filesystem		| Filesystem				|
 | Boost::nowide			| utf8 support				|
-| crow					| HTTP Router				|
 | rapidJSON				| JSON parser				|
 | bustache				| templating and views		|
 | openssl				| SSL						|
@@ -17,7 +16,7 @@ A hand-picked HTTP and WebSocket toolkit for C++. This criteria for the selectio
 
 Boost::Beast does simple HTTP header parsing of each field with name/value pairs. <BR>
 Boost::Beast does not do cookie parsing, Forms/File Uploads, or User Agent parsing. <BR>
-Unfortunately, there is not no mysql connector that can accompany this list. The official MySQL connector does not compile on mingw.
+Unfortunately, there is not a mysql connector that can accompany this list. The official MySQL connector does not compile on mingw.
 
 # Table of Contents
 
@@ -220,8 +219,7 @@ server.start((err) => {
 | Boost::Asio			| Boost Software License 1.0 	| https://github.com/boostorg/asio 							|
 | Boost::Beast			| Boost Software License 1.0	| https://github.com/boostorg/beast							|
 | Boost::Filesystem		| Boost Software License 1.0	| 															|
-| Boost::nowide			| Boost Software License 1.0	| https://github.com/artyom-beilis/nowide					|
-| crow					| attribute						| https://github.com/ipkn/crow								|
+| Boost::nowide			| Boost Software License 1.0	| https://github.com/artyom-beilis/nowide					|								|
 | rapidJSON				| MIT							| https://github.com/Tencent/rapidjson						|
 | bustache				| Boost Software License 1.0	| https://github.com/jamboree/bustache						|
 | openssl				| attribute						| https://github.com/openssl/openssl						|

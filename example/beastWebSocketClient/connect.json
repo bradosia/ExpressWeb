@@ -1,10 +1,14 @@
 {
 	"host": "monad.monar.ch",
 	"port": "25566",
+	"scheme": "ws",
 	"target": "/",
 	"request": {
 		"guid": "cad2e02b-b7e5-4c2e-8418-d1e6f446d0b6",
 		"type": "greeting",
 		"kind": "request"
+	},
+	"headers": {
+		"User-Agent": "Test Client"
 	}
 }

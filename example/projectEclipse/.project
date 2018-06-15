@@ -46,6 +46,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/beastHTTPServer</locationURI>
 		</link>
 		<link>
+			<name>beastWebSocketClient</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/beastWebSocketClient</locationURI>
+		</link>
+		<link>
+			<name>beastWebSocketClientAsync</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/beastWebSocketClientAsync</locationURI>
+		</link>
+		<link>
 			<name>bin</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/bin</locationURI>
