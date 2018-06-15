@@ -1,5 +1,5 @@
 # Name of the libraries and executable
-LIBRARY_CPP_NAME = ExpressWeb
+LIBRARY_CPP_NAME = OneHeader
 # Compiler and Dependency paths
 # HOST_OS the host OS
 # TARGET_OS the target OS
@@ -143,17 +143,17 @@ ifeq ($(HOST_OS),LINUX)
 		endif
 	endif
 endif
-PROGRAM_CPP_CONTRIB_LIST = rapidjson
-PROGRAM_CPP_EXAMPLE_LIST = beastWebSocketClientAsync beastHTTPClient beastWebSocketClient beastHTTPServer
-LIBRARY_CONTRIB_PARENT_DIR = .
-LIBRARY_EXAMPLE_PARENT_DIR = .
+PROGRAM_CPP_CONTRIB_LIST = 
+PROGRAM_CPP_EXAMPLE_LIST = 
+LIBRARY_CONTRIB_PARENT_DIR = ../..
+LIBRARY_EXAMPLE_PARENT_DIR = ../..
 # -I will be automatically prepended
 LIBRARY_CPP_COMPILE_INCLUDE_PATH = include
 # -L will be automatically prepended
 LIBRARY_CPP_LINK_LIB_PATHS = 
 # the version directory will be appended to each item on this list
 # -L will be automatically prepended
-LIBRARY_CPP_LINK_LIB_PATHS_VERSION = lib
+LIBRARY_CPP_LINK_LIB_PATHS_VERSION = 
 # -l will be automatically prepended
 LIBRARY_CPP_LINK_LIBS = 
 # the boost version will be appended to each item on this list
@@ -169,16 +169,16 @@ PROGRAM_CPP_LINK_LIB_PATHS_VERSION = lib bin
 PROGRAM_CPP_LINK_LIBS = $(LIBRARY_CPP_NAME)
 
 # Build OneHeader utility
-PROGRAM_ONE_HEADER_BUILD_FLAG=1
+PROGRAM_ONE_HEADER_BUILD_FLAG=0
 # Use OneHeader utility to create a single include header
-PROGRAM_ONE_HEADER_USE_FLAG=1
+PROGRAM_ONE_HEADER_USE_FLAG=0
 # Make Static Library
-LIBRARY_CPP_STATIC_BIN_FLAG=1
+LIBRARY_CPP_STATIC_BIN_FLAG=0
 # Make Shared Library
-LIBRARY_CPP_SHARED_BIN_FLAG=1
+LIBRARY_CPP_SHARED_BIN_FLAG=0
 # Make Executable
-LIBRARY_CPP_EXE_BIN_FLAG=0
+LIBRARY_CPP_EXE_BIN_FLAG=1
 # Make contributed libraries (typically they are dependencies too)
-PROGRAM_CPP_CONTRIB_FLAG=1
+PROGRAM_CPP_CONTRIB_FLAG=0
 # Make example programs
-PROGRAM_CPP_EXAMPLE_FLAG=1
+PROGRAM_CPP_EXAMPLE_FLAG=0
