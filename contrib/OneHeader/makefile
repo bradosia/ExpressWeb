@@ -372,10 +372,10 @@ ifeq ($(TARGET_OS),OSX)
 	# cpp library commands and flags
 	LIBRARY_COMPILE_INCLUDE_PATH = $(LIBRARY_COMPILE_INCLUDE_PATH_STANDARD) -I"$(BOOST_INCLUDE_DIR)" \
 		$(LIBRARY_CPP_COMPILE_INCLUDE_PATH_I) $(LIBRARY_CPP_COMPILE_INCLUDE_PATH_PLATFORM_I)
-	LIBRARY_COMPILE_FLAGS = $(LIBRARY_COMPILE_FLAGS_STANDARD) -mmacosx-version-min=10.9
+	LIBRARY_COMPILE_FLAGS = $(LIBRARY_COMPILE_FLAGS_STANDARD) -mmacosx-version-min=10.9 
 	
 	LIBRARY_EXE_LINK_FLAGS = $(LIBRARY_EXE_LINK_FLAGS_STANDARD) \
-		-dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9 -pthread
+		-dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9 -lm -stdlib=libstdc++
 	LIBRARY_EXE_LINK_LIB_PATH = $(LIBRARY_LINK_LIBS_PATH_STANDARD) $(LIBRARY_CPP_LINK_LIB_PATHS_L) $(LIBRARY_CPP_LINK_LIB_PATHS_VERSION_L) \
 		-L"$(BOOST_LIBS_DIR)" $(LIBRARY_CPP_LINK_LIB_PATH_PLATFORM_L)
 	LIBRARY_EXE_LINK_LIBS = $(LIBRARY_LINK_LIBS_STANDARD) $(LIBRARY_CPP_LINK_LIBS_l) $(LIBRARY_CPP_LINK_LIBS_VERSION_BOOST_l) \
@@ -390,7 +390,7 @@ ifeq ($(TARGET_OS),OSX)
 	# OneHeader c++
 	PROGRAM_ONE_HEADER_COMPILE_FLAGS = $(PROGRAM_CPP_COMPILE_FLAGS_STANDARD) -mmacosx-version-min=10.9
 	PROGRAM_ONE_HEADER_LINK_FLAGS = $(PROGRAM_CPP_LINK_FLAGS_STANDARD) \
-		-dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9 -pthread
+		-dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -mmacosx-version-min=10.9 -lm -stdlib=libstdc++
 endif
 ifeq ($(TARGET_OS),IOS)
 	# cpp library commands and flags
