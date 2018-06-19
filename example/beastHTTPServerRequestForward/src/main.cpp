@@ -22,6 +22,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>		// linux-x86_64-gcc needs this for boost::filesystem::fstream
 #include <boost/algorithm/string/predicate.hpp>		// boost::algorithm::ends_with
+#include <boost/algorithm/string/erase.hpp>			// boost::algorithm::erase_all_copy
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -352,14 +353,19 @@ public:
 		if (writeFileCallback_) {
 			// custom write callback
 			std::ifstream file;
+			std::string full_path;
 			if (documentRoot_) {
-				std::string full_path = documentRoot_.get().data();
+				full_path.append(documentRoot_.get().data(),
+						documentRoot_.get().size());
 				full_path.append(targetBase);
 				file.open(full_path.c_str());
 			}
 			if (!file.is_open()) {
-				send_bad_response(http::status::not_found,
-						"File not found\r\n");
+				std::string errorMsg;
+				errorMsg.append("File not found\r\n").append("fullpath: ").append(
+						full_path).append("\nbase: ").append(targetBase).append(
+						"\n");
+				send_bad_response(http::status::not_found, errorMsg);
 				return;
 			}
 			string_response_.emplace(std::piecewise_construct,
@@ -385,8 +391,9 @@ public:
 			// write to socket
 			http::file_body::value_type file;
 			boost::beast::error_code ec;
+			std::string full_path;
 			if (documentRoot_) {
-				std::string full_path = documentRoot_.get().data();
+				full_path = documentRoot_.get().data();
 				full_path.append(targetBase);
 				file.open(full_path.c_str(), boost::beast::file_mode::read, ec);
 			}
@@ -530,7 +537,8 @@ int main(int argc, char* argv[]) {
 				};
 
 		http_worker worker(writeCallback, writeFileCallback);
-		documentRoot = req.at("DOCUMENT_ROOT");
+		documentRoot = boost::algorithm::erase_all_copy(
+				req.at("DOCUMENT_ROOT").to_string(), "\n");
 		if (documentRoot) {
 			worker.setDocumentRoot(documentRoot.get());
 		}

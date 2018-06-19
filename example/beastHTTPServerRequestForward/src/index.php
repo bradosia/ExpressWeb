@@ -3,7 +3,7 @@
 $debug = true;
 $time_start = microtime(true);
 // run executable
-$executable = '/home/braduizn/public_html/OneHeader.exe';
+$executable = '/home/braduizn/public_html/example';
 $headerJSONString = addslashes(json_encode($_SERVER));
 exec($executable . ' "' . $headerJSONString . '" 2>&1', $outputArray, $returnVar);
 // timer end
