@@ -40,6 +40,8 @@ using tcp = boost::asio::ip::tcp;
 namespace http = boost::beast::http;
 // from <boost/beast/http.hpp>
 
+using headerMap_t = std::unordered_map<std::string, boost::string_view>;
+
 // Return a reasonable mime type based on the extension of a file.
 boost::beast::string_view mime_type(boost::beast::string_view path) {
 	using boost::beast::iequals;
@@ -111,7 +113,8 @@ public:
 
 private:
 	using alloc_t = fields_alloc<char>;
-	using request_body_t = http::basic_dynamic_body<boost::beast::flat_static_buffer<1024 * 1024>>;
+	//using request_body_t = http::basic_dynamic_body<boost::beast::flat_static_buffer<1024 * 1024>>;
+	using request_body_t = http::string_body;
 
 	// The acceptor used to listen for incoming connections.
 	tcp::acceptor& acceptor_;
@@ -317,11 +320,13 @@ int main(int argc, char* argv[]) {
 	std::string temp;
 	try {
 		boost::string_view configurationFilePathView = "../../connect.json";
-		boost::optional<boost::string_view> hostAddress;
-		boost::optional<int> hostPort;
-		boost::optional<boost::string_view> hostDocumentRoot;
-		boost::optional<int> hostWorkerNum;
-		boost::optional<bool> hostPoll;
+		boost::optional<boost::string_view> serverAddress;
+		boost::optional<int> serverPort;
+		boost::optional<boost::string_view> documentRoot;
+		boost::optional<int> workerThreadsNum;
+		boost::optional<bool> serverPoll;
+		boost::optional<boost::string_view> indexPage;
+		boost::optional<headerMap_t> clientHeaders;
 		if (argc > 1) {
 			configurationFilePathView = argv[1];
 		}
@@ -331,7 +336,7 @@ int main(int argc, char* argv[]) {
 				configurationFilePath };
 		if (configurationFileStream.is_open()) {
 			std::cout << "Opened the configuration file\n" << "\""
-					<< configurationFilePathView.data() << "\"\n";
+					<< configurationFilePathView << "\"\n";
 		} else {
 			throw myException("Could not open the configuration file");
 		}
@@ -358,29 +363,46 @@ int main(int argc, char* argv[]) {
 		} else {
 			if (jsonDocument.HasMember("address")
 					&& jsonDocument["address"].IsString()) {
-				hostAddress = boost::string_view(
+				serverAddress = boost::string_view(
 						jsonDocument["address"].GetString());
 			}
 			if (jsonDocument.HasMember("port")
 					&& jsonDocument["port"].IsInt()) {
-				hostPort = jsonDocument["port"].GetInt();
+				serverPort = jsonDocument["port"].GetInt();
 			}
 			if (jsonDocument.HasMember("documentRoot")
 					&& jsonDocument["documentRoot"].IsString()) {
-				hostDocumentRoot = boost::string_view(
+				documentRoot = boost::string_view(
 						jsonDocument["documentRoot"].GetString());
 			}
-			if (jsonDocument.HasMember("workers")
-					&& jsonDocument["workers"].IsInt()) {
-				hostWorkerNum = jsonDocument["workers"].GetInt();
+			if (jsonDocument.HasMember("workerThreadNum")
+					&& jsonDocument["workerThreadNum"].IsInt()) {
+				workerThreadsNum = jsonDocument["workerThreadNum"].GetInt();
 			}
 			if (jsonDocument.HasMember("poll")
 					&& jsonDocument["poll"].IsBool()) {
-				hostPoll = jsonDocument["poll"].GetBool();
+				serverPoll = jsonDocument["poll"].GetBool();
+			}
+			if (jsonDocument.HasMember("indexPage")
+					&& jsonDocument["indexPage"].IsString()) {
+				indexPage = boost::string_view(
+						jsonDocument["indexPage"].GetString());
+			}
+			if (jsonDocument.HasMember("headers")
+					&& jsonDocument["headers"].IsObject()) {
+				// construct the optional header map
+				headerMap_t headerMap;
+				for (auto& m : jsonDocument["headers"].GetObject()) {
+					if (m.name.IsString() && m.value.IsString()) {
+						headerMap.emplace(m.name.GetString(),
+								boost::string_view(m.value.GetString()));
+					}
+				}
+				clientHeaders = headerMap;
 			}
 		}
-		if (hostAddress && hostPort && hostDocumentRoot && hostWorkerNum
-				&& hostPoll) {
+		if (serverAddress && serverPort && documentRoot && workerThreadsNum
+				&& serverPoll) {
 			std::cout
 					<< "Found the required information from the configuration file.\n";
 		} else {
@@ -388,20 +410,16 @@ int main(int argc, char* argv[]) {
 					"Could not get the required information from the configuration file");
 		}
 
-		auto const address = boost::asio::ip::make_address(
-				(*hostAddress).data());
-		unsigned short port = static_cast<unsigned short>(*hostPort);
-
 		boost::asio::io_context ioc { 1 };
-		tcp::acceptor acceptor { ioc, { address, port } };
+		tcp::acceptor acceptor { ioc, { *serverAddress, *serverPort } };
 
 		std::list<http_worker> workers;
-		for (int i = 0; i < *hostWorkerNum; ++i) {
-			workers.emplace_back(acceptor, (*hostDocumentRoot).data());
+		for (int i = 0; i < *workerThreadsNum; ++i) {
+			workers.emplace_back(acceptor, *documentRoot);
 			workers.back().start();
 		}
 
-		if (*hostPoll)
+		if (*serverPoll)
 			for (;;)
 				ioc.poll();
 		else

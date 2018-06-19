@@ -1,14 +1,11 @@
 {
-	"host": "echo.websocket.org",
-	"port": "80",
-	"scheme": "ws",
-	"target": "/",
-	"request": {
-		"guid": "cad2e02b-b7e5-4c2e-8418-d1e6f446d0b6",
-		"type": "greeting",
-		"kind": "request"
-	},
+	"address": "0.0.0.0",
+	"port": 80,
+	"documentRoot": ".",
+	"workerThreadNum": 100,
+	"poll": false,
+	"indexPage": "index.html",
 	"headers": {
-		"User-Agent": "Test Client"
+		"server-tech": "boost::beast"
 	}
 }
