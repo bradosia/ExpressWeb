@@ -21,6 +21,8 @@
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>		// linux-x86_64-gcc needs this for boost::filesystem::fstream
+#include <boost/algorithm/string/predicate.hpp>		// boost::algorithm::ends_with
+#include <boost/algorithm/string/erase.hpp>			// boost::algorithm::erase_all_copy
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -41,6 +43,13 @@ namespace http = boost::beast::http;
 // from <boost/beast/http.hpp>
 
 using headerMap_t = std::unordered_map<std::string, boost::string_view>;
+using request_body_t = http::string_body;
+//using request_body_t = http::basic_dynamic_body<boost::beast::flat_static_buffer<1024 * 1024>>;
+using alloc_t = fields_alloc<char>;
+using waitable_timer_t = boost::asio::basic_waitable_timer<std::chrono::steady_clock>;
+using request_t = http::request<http::string_body, http::basic_fields<alloc_t>>;
+using response_t = http::response<http::string_body, http::basic_fields<alloc_t>>;
+using response_file_t = http::response<http::file_body, http::basic_fields<alloc_t>>;
 
 // Return a reasonable mime type based on the extension of a file.
 boost::beast::string_view mime_type(boost::beast::string_view path) {
@@ -97,33 +106,86 @@ boost::beast::string_view mime_type(boost::beast::string_view path) {
 	return "application/text";
 }
 
-class http_worker {
+namespace ExpressWeb {
+class algorithm {
 public:
-	http_worker(http_worker const&) = delete;
-	http_worker& operator=(http_worker const&) = delete;
+	static char* stripslashesC(const char* const &str);
+	std::string stripslashes(std::string const &str);
+};
+}
 
-	http_worker(tcp::acceptor& acceptor, const std::string& doc_root) :
-			acceptor_(acceptor), doc_root_(doc_root) {
+char* stripslashesC(const char* const &str) {
+	char* answer = new char[strlen(str)];
+	unsigned int i = 0;
+	unsigned int k = 0;
+	while (i < strlen(str) - 1) {
+		if (str[i] != '\\') {
+			answer[k++] = str[i++];
+		} else {
+			switch (str[i + 1]) {
+			case '\'':
+				answer[k++] = '\'';
+				break;
+			case '\"':
+				answer[k++] = '\"';
+				break;
+			case '\\':
+				answer[k++] = '\\';
+				break;
+			case '\0':
+				answer[k++] = '\0';
+				break;
+			case '/':
+				answer[k++] = '/';
+				break;
+			}
+			i += 2;
+		}
 	}
+	answer[k] = 0;
+	return answer;
+}
 
-	void start() {
-		accept();
-		check_deadline();
+std::string stripslashes(std::string const &str) {
+	std::string answer;
+	unsigned int i = 0;
+	while (i < str.size()) {
+		if (str[i] != '\\') {
+			answer.push_back(str[i++]);
+		} else {
+			switch (str[i + 1]) {
+			case '\'':
+				answer.push_back('\'');
+				break;
+			case '\"':
+				answer.push_back('\"');
+				break;
+			case '\\':
+				answer.push_back('\\');
+				break;
+			case '\0':
+				answer.push_back('\0');
+				break;
+			case '/':
+				answer.push_back('/');
+				break;
+			}
+			i += 2;
+		}
 	}
+	return answer;
+}
 
+class http_worker {
 private:
-	using alloc_t = fields_alloc<char>;
-	//using request_body_t = http::basic_dynamic_body<boost::beast::flat_static_buffer<1024 * 1024>>;
-	using request_body_t = http::string_body;
-
 	// The acceptor used to listen for incoming connections.
-	tcp::acceptor& acceptor_;
+	boost::optional<tcp::acceptor> acceptor_;
 
 	// The path to the root of the document directory.
-	std::string doc_root_;
+	boost::optional<boost::string_view> documentRoot_;
 
 	// The socket for the currently connected client.
-	tcp::socket socket_ { acceptor_.get_executor().context() };
+	boost::optional<tcp::socket> socket_;
 
 	// The buffer for performing reads
 	boost::beast::flat_static_buffer<8192> buffer_;
@@ -135,13 +197,10 @@ private:
 	boost::optional<http::request_parser<request_body_t, alloc_t>> parser_;
 
 	// The timer putting a time limit on requests.
-	boost::asio::basic_waitable_timer<std::chrono::steady_clock> request_deadline_ {
-			acceptor_.get_executor().context(),
-			(std::chrono::steady_clock::time_point::max)() };
+	boost::optional<waitable_timer_t> request_deadline_;
 
 	// The string-based response message.
-	boost::optional<
-			http::response<http::string_body, http::basic_fields<alloc_t>>> string_response_;
+	boost::optional<response_t> string_response_;
 
 	// The string-based response serializer.
 	boost::optional<
@@ -149,34 +208,67 @@ private:
 					http::basic_fields<alloc_t>>> string_serializer_;
 
 	// The file-based response message.
-	boost::optional<http::response<http::file_body, http::basic_fields<alloc_t>>> file_response_;
+	boost::optional<response_file_t> file_response_;
 
 	// The file-based response serializer.
 	boost::optional<
 			http::response_serializer<http::file_body,
 					http::basic_fields<alloc_t>>> file_serializer_;
 
+	// send callback
+	boost::optional<std::function<void(response_t&)>> writeCallback_;
+	boost::optional<std::function<void(response_file_t&)>> writeFileCallback_;
+public:
+	http_worker(http_worker const&) = delete;
+	http_worker& operator=(http_worker const&) = delete;
+
+	http_worker(std::function<void(response_t&)>& writeCallback,
+			std::function<void(response_file_t&)>& writeFileCallback) {
+		writeCallback_ = writeCallback;
+		writeFileCallback_ = writeFileCallback;
+	}
+
+	/*http_worker(tcp::acceptor& acceptor, const std::string& doc_root) :
+	 acceptor_(acceptor), documentRoot_(doc_root), socket_(
+	 tcp::socket(acceptor.get_executor().context())), request_deadline_(
+	 waitable_timer_t(acceptor.get_executor().context(),
+	 (std::chrono::steady_clock::time_point::max)())) {
+	 }*/
+
+	void setDocumentRoot(std::string& documentRoot) {
+		documentRoot_ = documentRoot;
+	}
+	void setDocumentRoot(boost::string_view& documentRoot) {
+		documentRoot_ = documentRoot;
+	}
+
+	void start() {
+		accept();
+		check_deadline();
+	}
+
 	void accept() {
 		// Clean up any previous connection.
 		boost::beast::error_code ec;
-		socket_.close(ec);
+		socket_.get().close(ec);
 		buffer_.consume(buffer_.size());
 
-		acceptor_.async_accept(socket_, [this](boost::beast::error_code ec)
-		{
-			if (ec)
-			{
-				accept();
-			}
-			else
-			{
-				// Request must be fully processed within 60 seconds.
-				request_deadline_.expires_after(
-						std::chrono::seconds(60));
+		acceptor_.get().async_accept(socket_.get(),
+				[this](boost::beast::error_code ec)
+				{
+					if (ec)
+					{
+						accept();
+					}
+					else
+					{
+						// Request must be fully processed within 60 seconds.
+						request_deadline_->expires_after(
+								std::chrono::seconds(60));
 
-				read_request();
-			}
-		});
+						read_request();
+					}
+				});
 	}
 
 	void read_request() {
@@ -194,7 +286,7 @@ private:
 		parser_.emplace(std::piecewise_construct, std::make_tuple(),
 				std::make_tuple(alloc_));
 
-		http::async_read(socket_, buffer_, *parser_,
+		http::async_read(socket_.get(), buffer_, parser_.get(),
 				[this](boost::beast::error_code ec, std::size_t)
 				{
 					if (ec)
@@ -232,16 +324,20 @@ private:
 		string_response_->body() = error;
 		string_response_->prepare_payload();
 
-		string_serializer_.emplace(*string_response_);
-
-		http::async_write(socket_, *string_serializer_,
-				[this](boost::beast::error_code ec, std::size_t)
-				{
-					socket_.shutdown(tcp::socket::shutdown_send, ec);
-					string_serializer_.reset();
-					string_response_.reset();
-					accept();
-				});
+		if (writeCallback_) {
+			// custom write callback
+			writeCallback_.get()(string_response_.get());
+		} else if (socket_) {
+			string_serializer_.emplace(string_response_.get());
+			http::async_write(socket_.get(), string_serializer_.get(),
+					[this](boost::beast::error_code ec, std::size_t)
+					{
+						socket_.get().shutdown(tcp::socket::shutdown_send, ec);
+						string_serializer_.reset();
+						string_response_.reset();
+						accept();
+					});
+		}
 	}
 
 	void send_file(boost::beast::string_view target) {
@@ -251,54 +347,105 @@ private:
 			send_bad_response(http::status::not_found, "File not found\r\n");
 			return;
 		}
-
-		std::string full_path = doc_root_;
-		full_path.append(target.data(), target.size());
-
-		http::file_body::value_type file;
-		boost::beast::error_code ec;
-		file.open(full_path.c_str(), boost::beast::file_mode::read, ec);
-		if (ec) {
-			send_bad_response(http::status::not_found, "File not found\r\n");
-			return;
+		std::string targetBase;
+		size_t queryDelimeterPos;
+		if ((queryDelimeterPos = target.find("?")) != std::string::npos) {
+			targetBase.append(target.data(), queryDelimeterPos);
+		} else {
+			targetBase.append(target.data(), target.size());
+		}
+		if (boost::algorithm::ends_with(targetBase, "/")) {
+			targetBase.append("index.html");
 		}
 
-		file_response_.emplace(std::piecewise_construct, std::make_tuple(),
-				std::make_tuple(alloc_));
+		if (writeFileCallback_) {
+			// custom write callback
+			std::ifstream file;
+			std::string full_path;
+			if (documentRoot_) {
+				full_path.append(documentRoot_.get().to_string());
+				full_path.append(targetBase);
+			}
+			if (!file.is_open()) {
+				std::string errorMsg;
+				errorMsg.append("File not found\r\n").append("fullpath: ").append(
+						full_path).append("\nbase: ").append(targetBase).append(
+						"\n");
+				send_bad_response(http::status::not_found, errorMsg);
+				return;
+			}
+			string_response_.emplace(std::piecewise_construct,
+					std::make_tuple(), std::make_tuple(alloc_));
 
-		file_response_->result(http::status::ok);
-		file_response_->keep_alive(false);
-		file_response_->set(http::field::server, "Beast");
-		file_response_->set(http::field::content_type,
-				mime_type(target.to_string()));
-		file_response_->body() = std::move(file);
-		file_response_->prepare_payload();
+			string_response_->result(http::status::ok);
+			string_response_->keep_alive(false);
+			string_response_->set(http::field::server, "Beast");
+			string_response_->set(http::field::content_type,
+					mime_type(targetBase));
 
-		file_serializer_.emplace(*file_response_);
+			file.seekg(0, std::ios::end);
+			string_response_->body().reserve(file.tellg());
+			file.seekg(0, std::ios::beg);
+			string_response_->body().assign(
+					(std::istreambuf_iterator<char>(file)),
+					std::istreambuf_iterator<char>());
 
-		http::async_write(socket_, *file_serializer_,
-				[this](boost::beast::error_code ec, std::size_t)
-				{
-					socket_.shutdown(tcp::socket::shutdown_send, ec);
-					file_serializer_.reset();
-					file_response_.reset();
-					accept();
-				});
+			string_response_->prepare_payload();
+
+			writeCallback_.get()(string_response_.get());
+		} else if (socket_) {
+			// write to socket
+			http::file_body::value_type file;
+			boost::beast::error_code ec;
+			std::string full_path;
+			if (documentRoot_) {
+				full_path = documentRoot_.get().data();
+				full_path.append(targetBase);
+				file.open(full_path.c_str(), boost::beast::file_mode::read, ec);
+			}
+			if (ec) {
+				send_bad_response(http::status::not_found,
+						"File not found\r\n");
+				return;
+			}
+
+			file_response_.emplace(std::piecewise_construct, std::make_tuple(),
+					std::make_tuple(alloc_));
+
+			file_response_->result(http::status::ok);
+			file_response_->keep_alive(false);
+			file_response_->set(http::field::server, "Beast");
+			file_response_->set(http::field::content_type,
+					mime_type(targetBase));
+			file_response_->body() = std::move(file);
+			file_response_->prepare_payload();
+
+			file_serializer_.emplace(file_response_.get());
+			http::async_write(socket_.get(), file_serializer_.get(),
+					[this](boost::beast::error_code ec, std::size_t)
+					{
+						socket_->shutdown(tcp::socket::shutdown_send, ec);
+						file_serializer_.reset();
+						file_response_.reset();
+						accept();
+					});
+		}
 	}
 
 	void check_deadline() {
 		// The deadline may have moved, so check it has really passed.
-		if (request_deadline_.expiry() <= std::chrono::steady_clock::now()) {
+		if (request_deadline_.get().expiry()
+				<= std::chrono::steady_clock::now()) {
 			// Close socket to cancel any outstanding operation.
 			boost::beast::error_code ec;
-			socket_.close();
+			socket_->close();
 
 			// Sleep indefinitely until we're given a new deadline.
-			request_deadline_.expires_at(
+			request_deadline_.get().expires_at(
 					std::chrono::steady_clock::time_point::max());
 		}
 
-		request_deadline_.async_wait([this](boost::beast::error_code)
+		request_deadline_.get().async_wait([this](boost::beast::error_code)
 		{
 			check_deadline();
 		});

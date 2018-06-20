@@ -1,6 +1,6 @@
 <?php
 // timer start
-$debug = true;
+$debug = false;
 $time_start = microtime(true);
 // run executable
 $executable = '/home/braduizn/public_html/example';
@@ -14,14 +14,14 @@ if ($returnVar == 0) {
     foreach ($outputArray as $key => $value) {
             if (! $body && $value == '') {
                 $body = true;
-                echo '<br>BODY<br>';
+               // echo '<br>BODY<br>';
             }
             if ($body) {
                 echo $value;
-                echo '<br>';
+                //echo '<br>';
             } else {
                 // header($value, true);
-                 echo $value . '<br>';
+                 //echo $value . '<br>';
             }
     }
     
