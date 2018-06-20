@@ -539,6 +539,8 @@ int main(int argc, char* argv[]) {
 		http_worker worker(writeCallback, writeFileCallback);
 		documentRoot = boost::algorithm::erase_all_copy(
 				req.at("DOCUMENT_ROOT").to_string(), "\n");
+		std::cout << "doc: " << req.at("DOCUMENT_ROOT").to_string() << "\n";
+		std::cout << "doc2: " << documentRoot.get() << "\n";
 		if (documentRoot) {
 			worker.setDocumentRoot(documentRoot.get());
 		}

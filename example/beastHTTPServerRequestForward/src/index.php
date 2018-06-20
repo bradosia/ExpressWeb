@@ -10,14 +10,28 @@ exec($executable . ' "' . $headerJSONString . '" 2>&1', $outputArray, $returnVar
 $time_end = microtime(true);
 if ($returnVar == 0) {
     // success
+    $body = false;
     foreach ($outputArray as $key => $value) {
-        echo $key . ' : ' . $value;
+        if ($key != '0') {
+            if (! $body && $value == '') {
+                $body = true;
+                echo '<br>BODY<br>';
+            }
+            if ($body) {
+                echo $value;
+                echo '<br>';
+            } else {
+                // header($value, true);
+                // echo $value . '<br>';
+            }
+        }
     }
+    
     ?>
 <div style="display: block;">execution time (microseconds 10^-6): <?php echo (($time_end - $time_start) * 1000000.0) ?></div>
 <?php
 }
-if ($returnVar == 0 || $debug) {
+if ($returnVar != 0 || $debug) {
     // failure
     ?>
 <html>
