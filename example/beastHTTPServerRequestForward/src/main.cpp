@@ -357,6 +357,7 @@ public:
 			if (documentRoot_) {
 				full_path.append(documentRoot_.get().to_string());
 				full_path.append(targetBase);
+				file.open(full_path.c_str());
 			}
 			if (!file.is_open()) {
 				std::string errorMsg;
