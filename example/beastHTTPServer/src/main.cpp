@@ -479,6 +479,129 @@ void Worker::check_deadline() {
 }
 
 } // namespace http
+
+class App {
+private:
+	boost::optional<unsigned short> port_;
+	boost::optional<boost::asio::ip::address> address_;
+	boost::optional<bool> poll_;
+	boost::optional<unsigned int> workerNum_;
+	boost::optional<boost::string_view> documentRoot_;
+public:
+	App() {
+
+	}
+	void setPort(boost::optional<int>& port);
+	void setPort(int port);
+	void setPort(unsigned int port);
+	void setPort(unsigned short port);
+	void setAddress(boost::optional<boost::string_view>& address);
+	void setAddress(const char* const address);
+	void setAddress(const std::string& address);
+	void setAddress(const boost::string_view& address);
+	void setAddress(boost::asio::ip::address address);
+	void setPoll(boost::optional<bool>& poll);
+	void setPoll(bool poll);
+	void setWorkerNum(boost::optional<int>& workerNum);
+	void setWorkerNum(int workerNum);
+	void setWorkerNum(unsigned int workerNum);
+	void setDocumentRoot(boost::optional<boost::string_view>& documentRoot);
+	void setDocumentRoot(const char* const documentRoot);
+	void setDocumentRoot(const std::string& documentRoot);
+	void setDocumentRoot(const boost::string_view& documentRoot);
+	void start();
+};
+
+/*
+ * App implementation
+ */
+
+void App::setPort(boost::optional<int>& port) {
+	if (port) {
+		setPort(port.get());
+	}
+}
+void App::setPort(int port) {
+	port_ = static_cast<unsigned short>(port);
+}
+void App::setPort(unsigned int port) {
+	port_ = static_cast<unsigned short>(port);
+}
+void App::setPort(unsigned short port) {
+	port_ = port;
+}
+void App::setAddress(boost::optional<boost::string_view>& address) {
+	if (address) {
+		setAddress(address.get());
+	}
+}
+void App::setAddress(const char* const address) {
+	boost::system::error_code ec;
+	address_ = boost::asio::ip::make_address(address, ec);
+}
+void App::setAddress(const std::string& address) {
+	boost::system::error_code ec;
+	address_ = boost::asio::ip::make_address(address, ec);
+}
+void App::setAddress(const boost::string_view& address) {
+	setAddress(address.to_string());
+}
+void App::setAddress(boost::asio::ip::address address) {
+	address_ = address;
+}
+void App::setPoll(boost::optional<bool>& poll) {
+	if (poll) {
+		setPoll(poll.get());
+	}
+}
+void App::setPoll(bool poll) {
+	poll_ = poll;
+}
+void App::setWorkerNum(boost::optional<int>& workerNum) {
+	if (workerNum) {
+		setWorkerNum(workerNum.get());
+	}
+}
+void App::setWorkerNum(int workerNum) {
+	workerNum_ = static_cast<unsigned int>(workerNum);
+}
+void App::setWorkerNum(unsigned int workerNum) {
+	workerNum_ = workerNum;
+}
+void App::setDocumentRoot(boost::optional<boost::string_view>& documentRoot) {
+	if (documentRoot) {
+		setDocumentRoot(documentRoot.get());
+	}
+}
+void App::setDocumentRoot(const char* const documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::setDocumentRoot(const std::string& documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::setDocumentRoot(const boost::string_view& documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::start() {
+	boost::asio::io_context ioc { 1 };
+	tcp::acceptor acceptor { ioc, { address_.get(), port_.get() } };
+
+	unsigned int i, n;
+	n = workerNum_.get();
+	std::list<ExpressWeb::http::Worker> workers;
+	for (i = 0; i < n; ++i) {
+		workers.emplace_back(acceptor);
+		workers.back().setDocumentRoot(documentRoot_.get());
+		workers.back().start();
+	}
+
+	if (poll_.get())
+		for (;;)
+			ioc.poll();
+	else
+		ioc.run();
+}
+
 } // namespace ExpressWeb
 
 class MyException: public std::exception {
@@ -492,8 +615,56 @@ public:
 	}
 };
 
+void parseJSON_UTF8_FileStream(rapidjson::Document& jsonDocument,
+		boost::filesystem::ifstream& configurationFileStream) {
+	rapidjson::IStreamWrapper isw(configurationFileStream);
+	rapidjson::EncodedInputStream<rapidjson::UTF8<>, rapidjson::IStreamWrapper> eis(
+			isw);
+	jsonDocument.ParseStream<
+			rapidjson::kParseNanAndInfFlag + rapidjson::kParseTrailingCommasFlag
+					+ rapidjson::kParseCommentsFlag, rapidjson::UTF8<> >(eis); // Parses UTF-8 file into UTF-8 in memory
+}
+
+void get_JSON_string(boost::optional<boost::string_view>& option,
+		const char* name, rapidjson::Document& jsonDocument) {
+	if (jsonDocument.HasMember(name) && jsonDocument[name].IsString()) {
+		option.emplace(jsonDocument[name].GetString());
+	}
+}
+
+void get_JSON_int(boost::optional<int>& option, const char* name,
+		rapidjson::Document& jsonDocument) {
+	if (jsonDocument.HasMember(name) && jsonDocument[name].IsInt()) {
+		option.emplace(jsonDocument[name].GetInt());
+	}
+}
+
+void get_JSON_bool(boost::optional<bool>& option, const char* name,
+		rapidjson::Document& jsonDocument) {
+	if (jsonDocument.HasMember(name) && jsonDocument[name].IsBool()) {
+		option.emplace(jsonDocument[name].GetBool());
+	}
+}
+
+void get_JSON_map_string(boost::optional<headerMap_t>& option, const char* name,
+		rapidjson::Document& jsonDocument) {
+	if (jsonDocument.HasMember(name) && jsonDocument[name].IsObject()) {
+		// construct the optional header map
+		headerMap_t map;
+		for (auto& m : jsonDocument[name].GetObject()) {
+			if (m.name.IsString() && m.value.IsString()) {
+				map.emplace(m.name.GetString(),
+						boost::string_view(m.value.GetString()));
+			}
+		}
+		option.emplace(map);
+	}
+}
+
 int main(int argc, char* argv[]) {
 	std::string temp;
+	std::string outputMsg;
+	std::string errorMsg;
 	try {
 		boost::string_view configurationFilePathView = "../../connect.json";
 		boost::optional<boost::string_view> serverAddress;
@@ -507,109 +678,61 @@ int main(int argc, char* argv[]) {
 			configurationFilePathView = argv[1];
 		}
 		boost::filesystem::path configurationFilePath {
-				configurationFilePathView.data() };
+				configurationFilePathView.to_string() };
 		boost::filesystem::ifstream configurationFileStream {
 				configurationFilePath };
-		if (configurationFileStream.is_open()) {
-			std::cout << "Opened the configuration file\n" << "\""
-					<< configurationFilePathView << "\"\n";
+		if (!configurationFileStream.is_open()) {
+			errorMsg.append("Could not open the configuration file\n").append(
+					"\"").append(configurationFilePathView.to_string()).append(
+					"\"\n");
 		} else {
-			throw MyException("Could not open the configuration file");
-		}
-		rapidjson::IStreamWrapper isw(configurationFileStream);
-		rapidjson::EncodedInputStream<rapidjson::UTF8<>,
-				rapidjson::IStreamWrapper> eis(isw);
-		rapidjson::Document jsonDocument; // Document is GenericDocument<UTF8<> >
-		jsonDocument.ParseStream<
-				rapidjson::kParseNanAndInfFlag
-						+ rapidjson::kParseTrailingCommasFlag
-						+ rapidjson::kParseCommentsFlag, rapidjson::UTF8<> >(
-				eis); // Parses UTF-8 file into UTF-8 in memory
+			outputMsg.append("Opened the configuration file\n").append("\"").append(
+					configurationFilePathView.to_string()).append("\"\n");
+			// parse the document as UTF8
+			rapidjson::Document jsonDocument;
+			parseJSON_UTF8_FileStream(jsonDocument, configurationFileStream);
 
-		if (jsonDocument.HasParseError()) {
-			std::string errorMsg;
-			errorMsg.append("Failed to parse JSON!");
-			if (jsonDocument.GetParseError() == 3) {
-				errorMsg.append(" Possible reason: file encoding incorrect\n");
-			} else {
-				errorMsg.append(" Error code: ").append(
-						std::to_string(jsonDocument.GetParseError())).append(
-						" at position ").append(
-						std::to_string(jsonDocument.GetErrorOffset()));
-			}
-			throw MyException(const_cast<const char*>(errorMsg.c_str()));
-		} else if (!jsonDocument.IsObject()) {
-			throw MyException("JSON is not an object");
-		} else {
-			if (jsonDocument.HasMember("address")
-					&& jsonDocument["address"].IsString()) {
-				serverAddress = boost::string_view(
-						jsonDocument["address"].GetString());
-			}
-			if (jsonDocument.HasMember("port")
-					&& jsonDocument["port"].IsInt()) {
-				serverPort = jsonDocument["port"].GetInt();
-			}
-			if (jsonDocument.HasMember("documentRoot")
-					&& jsonDocument["documentRoot"].IsString()) {
-				documentRoot = boost::string_view(
-						jsonDocument["documentRoot"].GetString());
-			}
-			if (jsonDocument.HasMember("workerThreadNum")
-					&& jsonDocument["workerThreadNum"].IsInt()) {
-				workerThreadsNum = jsonDocument["workerThreadNum"].GetInt();
-			}
-			if (jsonDocument.HasMember("poll")
-					&& jsonDocument["poll"].IsBool()) {
-				serverPoll = jsonDocument["poll"].GetBool();
-			}
-			if (jsonDocument.HasMember("indexPage")
-					&& jsonDocument["indexPage"].IsString()) {
-				indexPage = boost::string_view(
-						jsonDocument["indexPage"].GetString());
-			}
-			if (jsonDocument.HasMember("headers")
-					&& jsonDocument["headers"].IsObject()) {
-				// construct the optional header map
-				headerMap_t headerMap;
-				for (auto& m : jsonDocument["headers"].GetObject()) {
-					if (m.name.IsString() && m.value.IsString()) {
-						headerMap.emplace(m.name.GetString(),
-								boost::string_view(m.value.GetString()));
-					}
+			if (jsonDocument.HasParseError()) {
+				errorMsg.append("Failed to parse JSON!");
+				if (jsonDocument.GetParseError() == 3) {
+					errorMsg.append(
+							" Possible reason: file encoding incorrect\n");
+				} else {
+					errorMsg.append(" Error code: ").append(
+							std::to_string(jsonDocument.GetParseError())).append(
+							" at position ").append(
+							std::to_string(jsonDocument.GetErrorOffset()));
 				}
-				clientHeaders = headerMap;
+			} else if (!jsonDocument.IsObject()) {
+				errorMsg.append("JSON is not an object");
+			} else {
+				// These methods prevent the -Wmaybe-uninitialized warning
+				get_JSON_string(serverAddress, "address", jsonDocument);
+				get_JSON_int(serverPort, "port", jsonDocument);
+				get_JSON_string(documentRoot, "documentRoot", jsonDocument);
+				get_JSON_int(workerThreadsNum, "workerThreadNum", jsonDocument);
+				get_JSON_bool(serverPoll, "poll", jsonDocument);
+				get_JSON_string(indexPage, "indexPage", jsonDocument);
+				get_JSON_map_string(clientHeaders, "headers", jsonDocument);
+
+				if (!serverAddress || !serverPort || !documentRoot
+						|| !workerThreadsNum || !serverPoll) {
+					outputMsg.append(
+							"Could not get the required information from the configuration file.\n");
+				} else {
+					outputMsg.append(
+							"Found the required information from the configuration file.\n");
+
+					ExpressWeb::App app;
+					app.setPort(serverPort);
+					app.setAddress(serverAddress);
+					app.setPoll(serverPoll);
+					app.setWorkerNum(workerThreadsNum);
+					app.setDocumentRoot(documentRoot);
+					app.start();
+				}
 			}
 		}
-		if (serverAddress && serverPort && documentRoot && workerThreadsNum
-				&& serverPoll) {
-			std::cout
-					<< "Found the required information from the configuration file.\n";
-		} else {
-			throw MyException(
-					"Could not get the required information from the configuration file");
-		}
-
-		auto const address = boost::asio::ip::make_address(
-				serverAddress->to_string());
-		unsigned short port = static_cast<unsigned short>(serverPort.get());
-		boost::asio::io_context ioc { 1 };
-		tcp::acceptor acceptor { ioc, { address, port } };
-
-		std::list<ExpressWeb::http::Worker> workers;
-		for (int i = 0; i < workerThreadsNum.get(); ++i) {
-			workers.emplace_back(acceptor);
-			if (documentRoot) {
-				workers.back().setDocumentRoot(documentRoot.get());
-			}
-			workers.back().start();
-		}
-
-		if (serverPoll.get())
-			for (;;)
-				ioc.poll();
-		else
-			ioc.run();
 	} catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		std::cout << "Enter any key to exit...\n";

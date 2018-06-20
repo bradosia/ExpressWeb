@@ -479,6 +479,129 @@ void Worker::check_deadline() {
 }
 
 } // namespace http
+
+class App {
+private:
+	boost::optional<unsigned short> port_;
+	boost::optional<boost::asio::ip::address> address_;
+	boost::optional<bool> poll_;
+	boost::optional<unsigned int> workerNum_;
+	boost::optional<boost::string_view> documentRoot_;
+public:
+	App() {
+
+	}
+	void setPort(boost::optional<int>& port);
+	void setPort(int port);
+	void setPort(unsigned int port);
+	void setPort(unsigned short port);
+	void setAddress(boost::optional<boost::string_view>& address);
+	void setAddress(const char* const address);
+	void setAddress(const std::string& address);
+	void setAddress(const boost::string_view& address);
+	void setAddress(boost::asio::ip::address address);
+	void setPoll(boost::optional<bool>& poll);
+	void setPoll(bool poll);
+	void setWorkerNum(boost::optional<int>& workerNum);
+	void setWorkerNum(int workerNum);
+	void setWorkerNum(unsigned int workerNum);
+	void setDocumentRoot(boost::optional<boost::string_view>& documentRoot);
+	void setDocumentRoot(const char* const documentRoot);
+	void setDocumentRoot(const std::string& documentRoot);
+	void setDocumentRoot(const boost::string_view& documentRoot);
+	void start();
+};
+
+/*
+ * App implementation
+ */
+
+void App::setPort(boost::optional<int>& port) {
+	if (port) {
+		setPort(port.get());
+	}
+}
+void App::setPort(int port) {
+	port_ = static_cast<unsigned short>(port);
+}
+void App::setPort(unsigned int port) {
+	port_ = static_cast<unsigned short>(port);
+}
+void App::setPort(unsigned short port) {
+	port_ = port;
+}
+void App::setAddress(boost::optional<boost::string_view>& address) {
+	if (address) {
+		setAddress(address.get());
+	}
+}
+void App::setAddress(const char* const address) {
+	boost::system::error_code ec;
+	address_ = boost::asio::ip::make_address(address, ec);
+}
+void App::setAddress(const std::string& address) {
+	boost::system::error_code ec;
+	address_ = boost::asio::ip::make_address(address, ec);
+}
+void App::setAddress(const boost::string_view& address) {
+	setAddress(address.to_string());
+}
+void App::setAddress(boost::asio::ip::address address) {
+	address_ = address;
+}
+void App::setPoll(boost::optional<bool>& poll) {
+	if (poll) {
+		setPoll(poll.get());
+	}
+}
+void App::setPoll(bool poll) {
+	poll_ = poll;
+}
+void App::setWorkerNum(boost::optional<int>& workerNum) {
+	if (workerNum) {
+		setWorkerNum(workerNum.get());
+	}
+}
+void App::setWorkerNum(int workerNum) {
+	workerNum_ = static_cast<unsigned int>(workerNum);
+}
+void App::setWorkerNum(unsigned int workerNum) {
+	workerNum_ = workerNum;
+}
+void App::setDocumentRoot(boost::optional<boost::string_view>& documentRoot) {
+	if (documentRoot) {
+		setDocumentRoot(documentRoot.get());
+	}
+}
+void App::setDocumentRoot(const char* const documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::setDocumentRoot(const std::string& documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::setDocumentRoot(const boost::string_view& documentRoot) {
+	documentRoot_.emplace(documentRoot);
+}
+void App::start() {
+	boost::asio::io_context ioc { 1 };
+	tcp::acceptor acceptor { ioc, { address_.get(), port_.get() } };
+
+	unsigned int i, n;
+	n = workerNum_.get();
+	std::list<ExpressWeb::http::Worker> workers;
+	for (i = 0; i < n; ++i) {
+		workers.emplace_back(acceptor);
+		workers.back().setDocumentRoot(documentRoot_.get());
+		workers.back().start();
+	}
+
+	if (poll_.get())
+		for (;;)
+			ioc.poll();
+	else
+		ioc.run();
+}
+
 } // namespace ExpressWeb
 
 class MyException: public std::exception {
