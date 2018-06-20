@@ -360,10 +360,13 @@ public:
 				std::cout << "doc3: " << documentRoot_.get().to_string()
 						<< "\n";
 				std::cout << "doc4: " << documentRoot_.get() << "\n";
-				full_path.append(documentRoot_.get().data(),
-						documentRoot_.get().size());
+				full_path.append(documentRoot_.get().to_string());
+				std::cout << "doc9: " << full_path << "\n";
+				std::cout << "doc10: " << documentRoot_.get().to_string() << "\n";
 				full_path.append(targetBase);
+				std::cout << "doc11: " << full_path << "\n";
 				file.open(full_path.c_str());
+				std::cout << "doc12: " << full_path << "\n";
 			}
 			if (!file.is_open()) {
 				std::string errorMsg;
