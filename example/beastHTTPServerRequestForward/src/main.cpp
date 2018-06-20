@@ -232,6 +232,8 @@ public:
 	}
 	void setDocumentRoot(boost::string_view& documentRoot) {
 		documentRoot_ = documentRoot;
+		std::cout << "doc6: " << documentRoot.to_string() << "\n";
+		std::cout << "doc7: " << documentRoot_.get().to_string() << "\n";
 	}
 
 	void start() {
@@ -355,6 +357,9 @@ public:
 			std::ifstream file;
 			std::string full_path;
 			if (documentRoot_) {
+				std::cout << "doc3: " << documentRoot_.get().to_string()
+						<< "\n";
+				std::cout << "doc4: " << documentRoot_.get() << "\n";
 				full_path.append(documentRoot_.get().data(),
 						documentRoot_.get().size());
 				full_path.append(targetBase);

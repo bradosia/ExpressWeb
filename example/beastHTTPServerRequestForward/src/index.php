@@ -12,7 +12,6 @@ if ($returnVar == 0) {
     // success
     $body = false;
     foreach ($outputArray as $key => $value) {
-        if ($key != '0') {
             if (! $body && $value == '') {
                 $body = true;
                 echo '<br>BODY<br>';
@@ -22,9 +21,8 @@ if ($returnVar == 0) {
                 echo '<br>';
             } else {
                 // header($value, true);
-                // echo $value . '<br>';
+                 echo $value . '<br>';
             }
-        }
     }
     
     ?>
