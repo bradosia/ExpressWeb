@@ -1,7 +1,7 @@
 {
 	"address": "0.0.0.0",
 	"port": 80,
-	"documentRoot": ".",
-	"workers": 100,
+	"documentRoot": "../..",
+	"workerThreadNum": 100,
 	"poll": false
 }
