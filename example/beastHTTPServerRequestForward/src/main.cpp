@@ -232,8 +232,6 @@ public:
 	}
 	void setDocumentRoot(boost::string_view& documentRoot) {
 		documentRoot_ = documentRoot;
-		std::cout << "doc6: " << documentRoot.to_string() << "\n";
-		std::cout << "doc7: " << documentRoot_.get().to_string() << "\n";
 	}
 
 	void start() {
@@ -357,16 +355,8 @@ public:
 			std::ifstream file;
 			std::string full_path;
 			if (documentRoot_) {
-				std::cout << "doc3: " << documentRoot_.get().to_string()
-						<< "\n";
-				std::cout << "doc4: " << documentRoot_.get() << "\n";
 				full_path.append(documentRoot_.get().to_string());
-				std::cout << "doc9: " << full_path << "\n";
-				std::cout << "doc10: " << documentRoot_.get().to_string() << "\n";
 				full_path.append(targetBase);
-				std::cout << "doc11: " << full_path << "\n";
-				file.open(full_path.c_str());
-				std::cout << "doc12: " << full_path << "\n";
 			}
 			if (!file.is_open()) {
 				std::string errorMsg;
@@ -547,8 +537,6 @@ int main(int argc, char* argv[]) {
 		http_worker worker(writeCallback, writeFileCallback);
 		documentRoot = boost::algorithm::erase_all_copy(
 				req.at("DOCUMENT_ROOT").to_string(), "\n");
-		std::cout << "doc: " << req.at("DOCUMENT_ROOT").to_string() << "\n";
-		std::cout << "doc2: " << documentRoot.get() << "\n";
 		if (documentRoot) {
 			worker.setDocumentRoot(documentRoot.get());
 		}
