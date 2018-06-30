@@ -223,6 +223,7 @@
 		<configuration configurationName="test">
 			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
+		<configuration configurationName="win-x86_64-mingw-example"/>
 		<configuration configurationName="bin">
 			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
@@ -232,6 +233,8 @@
 		<configuration configurationName="win64_mingw">
 			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>
+		<configuration configurationName="win-x86_64-mingw"/>
+		<configuration configurationName="win-x86-mingw"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/ExpressWeb"/>
 		</configuration>

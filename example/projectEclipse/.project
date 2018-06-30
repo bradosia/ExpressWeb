@@ -46,6 +46,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/beastHTTPServer</locationURI>
 		</link>
 		<link>
+			<name>beastHTTPServerRequestForward</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/beastHTTPServerRequestForward</locationURI>
+		</link>
+		<link>
 			<name>beastWebSocketClient</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/beastWebSocketClient</locationURI>
