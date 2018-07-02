@@ -10,8 +10,8 @@ LIBRARY_CPP_NAME = ExpressWeb
 
 # build lists
 PROGRAM_CPP_CONTRIB_LIST = rapidjson
-PROGRAM_CPP_EXAMPLE_LIST = beastHTTPServer beastHTTPServerRequestForward beastWebSocketClient beastWebSocketClientAsync \
-	beastHTTPClient beastHTTPServer
+PROGRAM_CPP_EXAMPLE_LIST = ServerRoute ServerCreate beastHTTPServer beastHTTPServerRequestForward beastWebSocketClient \
+	beastWebSocketClientAsync beastHTTPClient beastHTTPServer
 
 # LIBRARY COMPILE INCLUDE DIRECTORY
 # PREPEND -I"
@@ -90,9 +90,9 @@ PROGRAM_ONE_HEADER_BUILD_FLAG=1
 # Use OneHeader utility to create a single include header
 PROGRAM_ONE_HEADER_USE_FLAG=1
 # Make Static Library
-LIBRARY_CPP_STATIC_BIN_FLAG=0
+LIBRARY_CPP_STATIC_BIN_FLAG=1
 # Make Shared Library
-LIBRARY_CPP_SHARED_BIN_FLAG=0
+LIBRARY_CPP_SHARED_BIN_FLAG=1
 # Make Executable
 LIBRARY_CPP_EXE_BIN_FLAG=0
 # Make contributed libraries (typically they are dependencies too)

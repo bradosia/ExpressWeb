@@ -10,11 +10,6 @@ int main() {
 				return true;
 			});
 
-	server.start([](err) {
-		if (err) {
-			throw err;
-		}
-		std::cout << "Server running at: " << server.info.uri << "\n";
-	});
+	server.start();
 	return 0;
 }

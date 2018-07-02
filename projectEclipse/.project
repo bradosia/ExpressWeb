@@ -61,6 +61,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/makefile</locationURI>
 		</link>
 		<link>
+			<name>makefile.mk</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/makefile.mk</locationURI>
+		</link>
+		<link>
 			<name>ref</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/ref</locationURI>

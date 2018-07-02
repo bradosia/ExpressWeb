@@ -9,7 +9,9 @@ namespace ExpressWeb {
 
 class Error_code {
 public:
-
+	operator bool() const {
+		return true;
+	}
 };
 
 }
